@@ -188,28 +188,6 @@ describe('[Services] Tools', () => {
         });
     });
 
-    describe('isNgrokUrl', () => {
-        it('Should check if string in an Ngrok URL', () => {
-            const values = {
-                'https://e8c5e39a224e.ngrok.io/test': true,
-                'https://e8c5e39a224e.ngrok.io/': true,
-                'https://e8c5e39a224e.ngrok.io': true,
-                'http://e8c5e39a224e.ngrok.io': true,
-                'http://e8c5e39a224e.ngrok.it': false,
-                'http://e8c5e-9a224e.ngrok.io': false,
-                'http://local.freeday': false,
-                'https://coddity.freeday-app.com': false
-            };
-            Object.values(values).forEach((url) => {
-                if (values[url]) {
-                    expect(Tools.isNgrokUrl(url)).to.be.true;
-                } else {
-                    expect(Tools.isNgrokUrl(url)).to.be.false;
-                }
-            });
-        });
-    });
-
     describe('isSlackId', () => {
         it('Should check if string is a valid Slack ID', () => {
             const values = {

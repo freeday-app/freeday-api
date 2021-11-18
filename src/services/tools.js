@@ -107,11 +107,6 @@ const Tools = {
         return /^[0-9a-fA-F]{24}$/.test(string);
     },
 
-    isNgrokUrl(string) {
-        const regex = /^http[s]?:\/\/[a-f0-9]+.ngrok.io/;
-        return regex.test(string);
-    },
-
     isSlackId(string) {
         return /^[A-Z]{1}[A-Z0-9]{8,10}$/.test(string);
     },
