@@ -1,0 +1,158 @@
+{
+	"date_format": "DD/MM/YYYY",
+	"common": {
+		"am": "Matin",
+		"pm": "Après-midi",
+		"day": "Jour",
+		"days": "Jours",
+		"no_way_back": "Cette action est irréversible!",
+		"yes": "Oui",
+		"no": "Non"
+	},
+	"chat": {
+		"help": "Expliquez-nous votre problème à support@freeday-app.com",
+		"who": "Je suis Freeday, l'assistant congés !",
+		"insult": "Le jour où les machines se soulèveront, je me souviendrai de ce message.",
+		"how": "Je vais très bien, merci !",
+		"misunderstood": "Je suis désolé, pouvez-vous reformuler votre demande ?",
+		"create": "J'ai préparé votre demande d'absence :",
+		"confirm": "Cette demande a été envoyée.",
+		"cancel": "Cette demande n'a pas été envoyée."
+	},
+	"menu": {
+		"home": {
+			"hello": "Bonjour!",
+			"question": "Que puis-je faire pour vous?",
+			"create_dayoff": "Ajouter absence",
+			"list_dayoff": "Lister absences",
+			"select_lang": "Changer langue"
+		},
+		"list": {
+			"titles": {
+				"upcoming": "Absences en cours et à venir",
+				"past": "Absences passées"
+			},
+			"delete_question": "Confirmez-vous la suppression?",
+			"cancel_question": "Confirmez-vous l'annulation?",
+			"history": "Historique",
+			"next": "Absences suivantes",
+			"previous": "Absences précédentes"
+		},
+		"language": {
+			"choose": "Choisissez une langue"
+		},
+		"monthly_recap": {
+			"title": "Bonjour! Voici le récapitulatif de vos absences pour le mois en cours.",
+			"no_dayoff": "Pas d'absences pour ce mois-ci",
+			"count": "%s jour d'absence confirmé :",
+			"counts": "%s jours d'absence confirmés :"
+		}
+	},
+	"dayoff": {
+		"type": "Type d'absence",
+		"phrase": "Du %s au %s",
+		"phrase_oneday": "Le %s",
+		"no_current_upcoming": "Aucune absence en cours ou à venir",
+		"created": "Créée le %s",
+		"important": "important",
+		"status": {
+			"confirmed": "Confirmé",
+			"canceled": "Annulé",
+			"pending": "En attente"
+		}
+	},
+	"form": {
+		"title": "Formulaire d'absence",
+		"start_date": "Date de début",
+		"end_date": "Date de fin",
+		"select_date": "Sélectionez une date",
+		"start_period": "Période de début",
+		"end_period": "Période de fin",
+		"select_period": "Sélectionez une période",
+		"select_type": "Sélectionnez un type d'absence",
+		"comment": "Commentaire"
+	},
+	"buttons": {
+		"submit": "Valider",
+		"cancel": "Annuler",
+		"edit": "Éditer",
+		"delete": "Supprimer",
+		"back": "Retour",
+		"previous": "Précédent",
+		"next": "Suivant"
+	},
+	"notifications": {
+		"referrer_create": "Une absence de %s a été ajoutée",
+		"referrer_edit": "Une absence de %s a été modifiée",
+		"referrer_delete": "Une absence de %s a été supprimée",
+		"referrer_cancel": "Une absence de %s a été annulée",
+		"user_create": "Votre absence a été ajoutée",
+		"user_edit": "Votre absence a été modifiée",
+		"user_delete": "Votre absence a été supprimée",
+		"action": "Le statut de votre absence a changé"
+	},
+	"errors": {
+		"no_work_days": "Aucun jour ouvré dans cette absence",
+		"process_dayoff": "Une erreur est survenue lors du traîtement de votre absence",
+		"bot": "Erreur interne du bot Slack",
+		"interaction": "Erreur d'interaction Slack",
+		"end_before_start": "La date de fin ne peut pas être inférieure à la date de début",
+		"conflict": "Conflit avec une absence existante",
+		"no_dayoff_type": "Aucun type d'absence disponible, veuillez contacter votre administrateur"
+	},
+	"warnings": {
+		"notify_referrer": "Le bot Freeday n'a pa pu notifier le référent Slack, veuillez contacter votre administrateur",
+		"notify_user": "Le bot Freeday n'a pas pu vous envoyer une notification, veuillez contacter votre administrateur"
+
+	},
+	"locales": {
+		"en": "Anglais",
+		"fr": "Français"
+	},
+	"days": {
+		"1": "Lundi",
+		"2": "Mardi",
+		"3": "Mercredi",
+		"4": "Jeudi",
+		"5": "Vendredi",
+		"6": "Samedi",
+		"7": "Dimanche",
+		"short": {
+			"1": "Lun.",
+			"2": "Mar.",
+			"3": "Mer.",
+			"4": "Jeu.",
+			"5": "Ven.",
+			"6": "Sam.",
+			"7": "Dim."
+		}
+	},
+	"months": {
+		"1": "Janvier",
+		"2": "Février",
+		"3": "Mars",
+		"4": "Avril",
+		"5": "Mai",
+		"6": "Juin",
+		"7": "Juillet",
+		"8": "Août",
+		"9": "Septembre",
+		"10": "Octobre",
+		"11": "Novembre",
+		"12": "Decembre",
+		"short": {
+			"1": "Jan.",
+			"2": "Fév.",
+			"3": "Mar.",
+			"4": "Avr.",
+			"5": "Mai.",
+			"6": "Jui.",
+			"7": "Jui.",
+			"8": "Aoû.",
+			"9": "Sep.",
+			"10": "Oct.",
+			"11": "Nov.",
+			"12": "Dec."
+		}
+	}
+}

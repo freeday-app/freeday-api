@@ -1,0 +1,43 @@
+# /api/users
+
+get:
+  tags:
+    - 'Users'
+  summary: 'Gets the list of users'
+  description: ''
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/users.yaml#/UserList'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Users'
+  summary: 'Creates a new user'
+  description: ''
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/users.yaml#/UserCreate'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/users.yaml#/User'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    409:
+      $ref: '../../responses/errors.yaml#/ConflictError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

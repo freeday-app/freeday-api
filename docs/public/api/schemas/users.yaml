@@ -1,0 +1,59 @@
+# Users
+
+User:
+  allOf:
+    - $ref: './global.yaml#/DocumentId'
+    - $ref: '#UserData'
+
+UserList:
+  allOf:
+    - type: 'object'
+      properties:
+        users:
+          type: 'array'
+          items:
+            $ref: '#User'
+    - $ref: './global.yaml#/Total'
+    - $ref: './global.yaml#/Page'
+
+UserData:
+  type: 'object'
+  properties:
+    username:
+      type: 'string'
+      description: "User name"
+      minLength: 6
+      example: 'lucie.bronze'
+    language:
+      type: 'string'
+      format: 'country-code'
+      description: "User language"
+      example: 'en'
+    theme:
+      type: 'string'
+      enum: ['light','dark']
+      description: "User theme"
+      example: 'dark'
+
+UserCreate:
+  allOf:
+    - $ref: '#UserData'
+    - $ref: '#UserPassword'
+    - required:
+      - username
+      - password
+
+UserEdit:
+  allOf:
+    - $ref: '#UserData'
+    - $ref: '#UserPassword'
+
+UserPassword:
+  type: 'object'
+  properties:
+    password:
+      type: 'string'
+      description: "User password"
+      minLength: 6
+      default: 'en'
+      example: 'password123'

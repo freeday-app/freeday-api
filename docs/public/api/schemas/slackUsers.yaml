@@ -1,0 +1,58 @@
+# Slack
+
+SlackUser:
+  allOf:
+    - $ref: './global.yaml#/DocumentId'
+    - $ref: '#SlackUserData'
+
+SlackUserList:
+  allOf:
+    - type: 'object'
+      properties:
+        slackUsers:
+          type: 'array'
+          items:
+            $ref: '#SlackUser'
+    - $ref: './global.yaml#/Total'
+    - $ref: './global.yaml#/Page'
+
+SlackUserData:
+  type: 'object'
+  properties:
+    slackId:
+      type: 'string'
+      format: 'slack-id'
+      description: "Slack user ID"
+      example: 'UGJ7AVX32'
+    name:
+      type: 'string'
+      description: "Slack user name"
+      example: 'Sam Kerr'
+    avatar:
+      type: 'string'
+      format: 'uri'
+      description: "Slack user avatar URL"
+      example: 'https://url.com/avatar.png'
+    locale:
+      type: 'string'
+      format: 'LCID'
+      description: 'Slack user locale taken from their client preferences'
+      example: 'en'
+    forcedLocale:
+      type: 'string'
+      format: 'LCID'
+      description: 'Slack user locale that they chose to use with the Freeday bot'
+      example: 'fr'
+    deleted:
+      type: 'boolean'
+      description: "If user has been deleted on Slack"
+      example: false
+
+SlackUserCreate:
+  allOf:
+    - $ref: '#SlackUserData'
+    - required:
+      - slackId
+      - name
+      - avatar
+      - email

@@ -1,0 +1,46 @@
+# Configuration
+
+Configuration:
+  type: 'object'
+  properties:
+    brandingName:
+      description: "Branding name"
+      type: 'string'
+      example: 'Coddity'
+    brandingLogo:
+      description: "Branding logo in base64"
+      type: 'string'
+      format: 'base64'
+      example: 'data:image/png;base64,A0/b1C2//d3E4f=='
+    slackReferrer:
+      description: "Slack referrer user ID"
+      type: 'string'
+      format: 'slack-id'
+      example: 'UXJOA3X11'
+    workDays:
+      type: 'array'
+      items:
+        type: 'integer'
+        minimum: 0
+        maximum: 6
+      description: "List of work days"
+      example: [1,2,3]
+
+ConfigurationPublic:
+  type: 'object'
+  properties:
+    brandingName:
+      description: "Branding name"
+      type: 'string'
+      example: 'Coddity'
+    brandingLogo:
+      description: "Branding logo in base64"
+      type: 'string'
+      format: 'base64'
+      example: 'data:image/png;base64,A0/b1C2//d3E4f=='
+
+ConfigurationPost:
+  allOf:
+    - $ref: '#Configuration'
+    - required:
+      - workDays

@@ -1,0 +1,27 @@
+{
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "requireConfigFile": false
+    },
+    "plugins": [
+        "chai-friendly"
+    ],
+    "extends": [
+        "airbnb-base",
+        "plugin:chai-friendly/recommended"
+    ],
+    "rules": {
+        "comma-dangle": ["error", "never"],
+        "import/extensions": ["error", "always"],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
+        "no-param-reassign": ["error", {
+            "props": false
+        }],
+        "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "no-underscore-dangle": ["error", {
+            "allow": ["_id"]
+        }]
+    }
+}

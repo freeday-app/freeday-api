@@ -1,0 +1,15 @@
+# /api/configuration/public
+
+get:
+  tags:
+    - 'Configuration'
+  summary: 'Gets current public configuration'
+  description: 'Public configuration is exposed for non-authenticated users in order to obtain basic information about the instance'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/configuration.yaml#/ConfigurationPublic'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

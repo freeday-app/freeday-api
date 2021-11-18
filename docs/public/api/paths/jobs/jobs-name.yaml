@@ -1,0 +1,57 @@
+# /api/jobs/{jobName}
+
+get:
+  tags:
+    - 'Jobs'
+  summary: "Gets a job's settings"
+  description: ''
+  parameters:
+    - name: 'jobName'
+      required: true
+      in: 'path'
+      schema:
+        type : 'string'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/jobs.yaml#/Job'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    404:
+      $ref: '../../responses/errors.yaml#/NotFoundError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Jobs'
+  summary: "Edit a jobs settings"
+  description: ''
+  parameters:
+    - name: 'jobName'
+      required: true
+      in: 'path'
+      schema:
+        type : 'string'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/jobs.yaml#/JobEdit'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/jobs.yaml#/Job'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

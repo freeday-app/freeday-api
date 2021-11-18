@@ -1,0 +1,58 @@
+# /api/daysoff/types
+
+get:
+  tags:
+    - 'Dayoff types'
+  summary: 'Gets the list of day-off types'
+  description: ''
+  parameters:
+    - name: 'enabled'
+      in: 'query'
+      schema:
+        type : 'boolean'
+    - name: 'displayed'
+      in: 'query'
+      schema:
+        type : 'boolean'
+    - name: 'important'
+      in: 'query'
+      schema:
+        type : 'boolean'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/dayoffTypes.yaml#/DayoffTypeList'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+post:
+  tags:
+    - 'Dayoff types'
+  summary: 'Creates a new dayoff type'
+  description: |
+    * If a dayoff type with same name already exist conflict error will be thrown
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/dayoffTypes.yaml#/DayoffTypeCreate'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/dayoffTypes.yaml#/DayoffType'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    409:
+      $ref: '../../responses/errors.yaml#/ConflictError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

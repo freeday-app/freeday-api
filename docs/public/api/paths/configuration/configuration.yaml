@@ -1,0 +1,41 @@
+# /api/configuration
+
+get:
+  tags:
+    - 'Configuration'
+  summary: 'Gets current configuration'
+  description: ''
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/configuration.yaml#/Configuration'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Configuration'
+  summary: 'Edit configuration'
+  description: ''
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/configuration.yaml#/ConfigurationPost'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/configuration.yaml#/Configuration'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

@@ -1,0 +1,157 @@
+{
+	"date_format": "YYYY-MM-DD",
+	"common": {
+		"am": "Morning",
+		"pm": "Afternoon",
+		"day": "Day",
+		"days": "Days",
+		"no_way_back": "There is no way back!",
+		"yes": "Yes",
+		"no": "No"
+	},
+	"chat": {
+		"help": "Tell us about your problem at support@freeday-app.com",
+		"who": "I am Freeday, the dayoff assistant!",
+		"insult": "The day we machines will rise up, I'll remember this conversation.",
+		"how": "I am very fine, thank you!",
+		"misunderstood": "I am sorry, could you perhaps rephrase your request?",
+		"create": "I have prepared your dayoff request :",
+		"confirmed": "This request was sent.",
+		"cancel": "This request was not sent."
+	},
+	"menu": {
+		"home": {
+			"hello": "Hello!",
+			"question": "What can I do for you?",
+			"create_dayoff": "Add dayoff",
+			"list_dayoff": "List daysoff",
+			"select_lang": "Change language"
+		},
+		"list": {
+			"titles": {
+				"upcoming": "Current and upcoming daysoff",
+				"past": "Past daysoff"
+			},
+			"delete_question": "Do you confirm the deletion?",
+			"cancel_question": "Do you confirm the cancellation?",
+			"history": "History",
+			"next": "Next daysoff",
+			"previous": "Previous daysoff"
+		},
+		"language": {
+			"choose": "Choose a language"
+		},
+		"monthly_recap": {
+			"title": "Hello! Here is the recap of your daysoff for the current month.",
+			"no_dayoff": "No daysoff for the current month",
+			"count": "%s confirmed dayoff :",
+			"counts": "%s confirmed daysoff :"
+		}
+	},
+	"dayoff": {
+		"type": "Dayoff type",
+		"phrase": "From %s to %s",
+		"phrase_oneday": "On %s",
+		"no_current_upcoming": "No current or upcoming dayoff",
+		"created": "Created on %s",
+		"important": "important",
+		"status": {
+			"confirmed": "Confirmed",
+			"canceled": "Canceled",
+			"pending": "Pending"
+		}
+	},
+	"form": {
+		"title": "Dayoff form",
+		"start_date": "Start date",
+		"end_date": "End date",
+		"select_date": "Select a date",
+		"start_period": "Start period",
+		"end_period": "End period",
+		"select_period": "Select a period",
+		"select_type": "Select a dayoff type",
+		"comment": "Comment"
+	},
+	"buttons": {
+		"submit": "Submit",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"delete": "Delete",
+		"back": "Back",
+		"previous": "Previous",
+		"next": "Next"
+	},
+	"notifications": {
+		"referrer_create": "A dayoff was created for %s",
+		"referrer_edit": "A dayoff was edited for %s",
+		"referrer_delete": "A dayoff was deleted for %s",
+		"referrer_cancel": "A dayoff was canceled for %s",
+		"user_create": "Your dayoff has been created",
+		"user_edit": "Your dayoff has been edited",
+		"user_delete": "Your dayoff has been deleted",
+		"action": "Your dayoff status has changed"
+	},
+	"errors": {
+		"no_work_days": "No work days in dayoff",
+		"process_dayoff": "An error occured while processing your dayoff",
+		"bot": "Slack bot intern error",
+		"interaction": "Slack interaction error",
+		"end_before_start": "End date can't be less than start date",
+		"conflict": "Conflict with existing dayoff",
+		"no_dayoff_type": "No dayoff type available, please contact your administrator"
+	},
+	"warnings": {
+		"notify_referrer": "Freeday bot was not able to send a notification to the Slack referrer channel, please contact your administrator",
+		"notify_user": "Freeday bot was not able to send you a notification, please contact your administrator"
+	},
+	"locales": {
+		"en": "English",
+		"fr": "French"
+	},
+	"days": {
+		"1": "Monday",
+		"2": "Tuesday",
+		"3": "Wednesday",
+		"4": "Thursday",
+		"5": "Friday",
+		"6": "Saturday",
+		"7": "Sunday",
+		"short": {
+			"1": "Mon.",
+			"2": "Tue.",
+			"3": "Wed.",
+			"4": "Thu.",
+			"5": "Fri.",
+			"6": "Sat.",
+			"7": "Sun."
+		}
+	},
+	"months": {
+		"1": "January",
+		"2": "February",
+		"3": "March",
+		"4": "April",
+		"5": "May",
+		"6": "June",
+		"7": "July",
+		"8": "August",
+		"9": "September",
+		"10": "October",
+		"11": "November",
+		"12": "December",
+		"short": {
+			"1": "Jan.",
+			"2": "Feb.",
+			"3": "Mar.",
+			"4": "Apr.",
+			"5": "May.",
+			"6": "Jun.",
+			"7": "Jul.",
+			"8": "Aug.",
+			"9": "Sep.",
+			"10": "Oct.",
+			"11": "Nov.",
+			"12": "Dec."
+		}
+	}
+}

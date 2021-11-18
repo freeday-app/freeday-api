@@ -1,0 +1,57 @@
+# /api/auth
+
+get:
+  tags:
+    - 'Authentication'
+  summary: 'Gets current authentication information'
+  description: ''
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/auth.yaml#/Authentication'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Authentication'
+  summary: 'Authenticates user with username and password'
+  description: ''
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/auth.yaml#/AuthenticationPost'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/auth.yaml#/Authentication'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+delete:
+  tags:
+    - 'Authentication'
+  summary: 'Revokes current authentication token'
+  description: ''
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            type: 'object'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

@@ -1,0 +1,28 @@
+# /api/slack/users/{slackUserId}
+
+get:
+  tags:
+    - 'Slack'
+  summary: 'Gets Slack user information'
+  description: ''
+  parameters:
+    - name: 'slackUserId'
+      required: true
+      in: 'path'
+      schema:
+        type : 'string'
+        format: 'slack-id'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/slackUsers.yaml#/SlackUser'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    404:
+      $ref: '../../responses/errors.yaml#/NotFoundError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

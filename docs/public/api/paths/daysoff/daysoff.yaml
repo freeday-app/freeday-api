@@ -1,0 +1,86 @@
+# /api/daysoff
+
+get:
+  tags:
+    - 'Daysoff'
+  summary: 'Gets the list of days-off'
+  description: ''
+  parameters:
+    - name: 'start'
+      in: 'query'
+      schema:
+        type : 'string'
+        format: 'date'
+    - name: 'end'
+      in: 'query'
+      schema:
+        type : 'string'
+        format: 'date'
+    - name: 'type'
+      in: 'query'
+      style: 'form'
+      explode: false
+      schema:
+        type : 'array'
+        items:
+          type : 'string'
+          format: 'uuid'
+    - name: 'slackUser'
+      in: 'query'
+      style: 'form'
+      explode: false
+      schema:
+        type : 'array'
+        items:
+          type : 'string'
+          format: 'slack-id'
+    - name: 'status'
+      in: 'query'
+      schema:
+        type : 'string'
+        enum: ['confirmed','canceled','pending']
+    - name: 'order'
+      in: 'query'
+      schema:
+        type : 'string'
+        format: 'slack-id'
+        enum: ['asc','desc']
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/daysoff.yaml#/DayoffList'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Daysoff'
+  summary: 'Creates a new dayoff'
+  description: |
+    * If conflicts with other daysoff are detected an error is thrown
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/daysoff.yaml#/DayoffCreate'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/daysoff.yaml#/Dayoff'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    409:
+      $ref: '../../responses/errors.yaml#/ConflictError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

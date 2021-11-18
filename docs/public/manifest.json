@@ -1,0 +1,7 @@
+{
+  "short_name": "Freeday Docs",
+  "name": "Freeday Docs",
+  "icons": [],
+  "start_url": "./index.html",
+  "display": "standalone"
+}

@@ -1,0 +1,43 @@
+# /api/slack/auth
+
+get:
+  tags:
+    - 'Slack'
+  summary: 'Gets Slack OAuth URL'
+  description: ''
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/slackAuth.yaml#/SlackOAuthUrl'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'
+
+post:
+  tags:
+    - 'Slack'
+  summary: 'Registers Slack app with OAuth data returned by Slack'
+  description: ''
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schemas/slackAuth.yaml#/SlackOAuthRegister'
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            type: 'object'
+    400:
+      $ref: '../../responses/errors.yaml#/ValidationError'
+    401:
+      $ref: '../../responses/errors.yaml#/AuthenticationError'
+    500:
+      $ref: '../../responses/errors.yaml#/InternError'

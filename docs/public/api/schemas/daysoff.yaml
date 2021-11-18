@@ -1,0 +1,148 @@
+# Daysoff
+
+Dayoff:
+  allOf:
+    - $ref: './global.yaml#/DocumentId'
+    - $ref: '#DayoffData'
+
+DayoffList:
+  allOf:
+    - type: 'object'
+      properties:
+        daysoff:
+          type: 'array'
+          items:
+            $ref: '#Dayoff'
+    - $ref: './global.yaml#/Total'
+    - $ref: './global.yaml#/Page'
+
+DayoffData:
+  type: 'object'
+  properties:
+    start:
+      type: 'string'
+      format: 'date-time'
+      description: "Start date"
+      example: '2018-12-23T23:00:00.000Z'
+    end:
+      type: 'string'
+      format: 'date-time'
+      description: "End date"
+      example: '2018-12-25T23:00:00.000Z'
+      default: 'Same as start date'
+    startPeriod:
+      type: 'string'
+      description: "Start date period"
+      example: 'am'
+      default: 'am'
+      enum: ['am','pm']
+    endPeriod:
+      type: 'string'
+      description: "End date period"
+      example: 'pm'
+      default: 'pm'
+      enum: ['am','pm']
+    count:
+      type: 'integer'
+      description: "Number of days in the dayoff"
+      example: 2
+    days:
+      type: 'array'
+      description: "List of days in the dayoff"
+      items:
+        type: 'string'
+        format: 'date-time'
+      example: [
+        "2018-12-23T23:00:00.000Z",
+        "2018-12-24T23:00:00.000Z",
+        "2018-12-25T23:00:00.000Z"
+      ]
+    type:
+      type: 'object'
+      allOf:
+        - $ref: './global.yaml#/DocumentId'
+        - $ref: './dayoffTypes.yaml#/DayoffType'
+    slackUser:
+      $ref: './slackUsers.yaml#/SlackUser'
+    comment:
+      type: 'string'
+      description: "Comment"
+      example: "Some comment"
+    confirmed:
+      type: 'boolean'
+      description: "If dayoff is confirmed"
+      example: true
+    canceled:
+      type: 'boolean'
+      description: "If dayoff is canceled"
+      example: false
+
+DayoffCreate:
+  allOf:
+    - $ref: '#DayoffEdit'
+    - required:
+      - type
+      - slackUser
+      - start
+
+DayoffEdit:
+  type: 'object'
+  properties:
+    start:
+      type: 'string'
+      format: 'date'
+      description: "Start date"
+      example: '2018-12-23'
+    end:
+      type: 'string'
+      format: 'date'
+      description: "End date"
+      example: '2018-12-25'
+      default: 'Same as start date'
+    startPeriod:
+      type: 'string'
+      description: "Start date period"
+      example: 'am'
+      default: 'am'
+      enum: ['am','pm']
+    endPeriod:
+      type: 'string'
+      description: "End date period"
+      example: 'pm'
+      default: 'pm'
+      enum: ['am','pm']
+    type:
+      description: "Dayoff type ID"
+      type: 'string'
+      format: 'uuid'
+      example: '5edb896d286e1fba4f7047a1'
+    slackUser:
+      description: "Slack user ID"
+      type: 'string'
+      format: 'slack-id'
+      example: 'UGJ7AVX32'
+    comment:
+      type: 'string'
+      description: "Comment"
+      example: "Some comment"
+    force:
+      description: "If true skips conflict detection"
+      type: 'boolean'
+      default: false
+
+DayoffConfirmPost:
+  type: 'object'
+  properties:
+    force:
+      description: |
+        * 'true' will force confirmation (any conflicted dayoff will be canceled)
+        * 'false' will throw error if conflicts are detected
+      type: 'boolean'
+      default: false
+
+DayoffCancelPost:
+    type: 'object'
+    properties:
+      cancelReason:
+        description: "Cancelation reason"
+        type: 'string'
