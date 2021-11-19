@@ -4,7 +4,7 @@
 const Log = require('../services/log.js');
 const SDK = require('./utils/sdk.js');
 const Handlers = require('./utils/handlers.js');
-const SlackAuthController = require('../api/controllers/slackAuth.js');
+// const SlackAuthController = require('../api/controllers/slackAuth.js');
 const LanguageService = require('../services/language.js');
 const DialogService = require('../services/dialog.js');
 const Configuration = require('../services/configuration.js');
@@ -15,9 +15,10 @@ const Bot = {
     async init(App) {
         try {
             // récupère données authentification slack
-            const auth = await SlackAuthController.get();
+            // const auth = await SlackAuthController.get();
             // initialise sdk slack
-            await SDK.init(App, auth);
+            // await SDK.init(App, auth);
+            await SDK.init(App);
             // initialise dialogflow
             if (Configuration.data.dialogflow) {
                 DialogService.init();

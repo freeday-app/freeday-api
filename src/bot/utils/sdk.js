@@ -27,15 +27,18 @@ const SDK = {
     ],
 
     // initializes slack sdk
-    async init(App, auth) {
+    // async init(App, auth) {
+    async init(App) {
         try {
             const {
                 slack: {
-                    signingSecret
+                    signingSecret,
+                    accessToken
                 }
             } = Configuration.data;
             // initializes web clients
-            SDK.initWebClient(auth);
+            // SDK.initWebClient(auth);
+            SDK.initWebClient(accessToken);
             // initializes Slack application
             SDK.app = new SlackApp({
                 authorize: () => ({ botToken: null }),
@@ -87,8 +90,10 @@ const SDK = {
     },
 
     // initializes web client
-    initWebClient(auth) {
-        SDK.webClient = auth && auth.accessToken ? new WebClient(auth.accessToken) : null;
+    // initWebClient(auth) {
+    initWebClient(accessToken) {
+        // SDK.webClient = auth && auth.accessToken ? new WebClient(auth.accessToken) : null;
+        SDK.webClient = accessToken ? new WebClient(accessToken) : null;
     },
 
     // tests if web client has a valid access token

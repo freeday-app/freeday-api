@@ -1,4 +1,5 @@
 {
+	"publicUrl": "https://[domain]/",
 	"port": "[port]",
 	"logDir": "[/path/to/logs]",
 	"mongoUrl": "mongodb://[url]:[port]/[database]",
@@ -6,10 +7,9 @@
 	"slack": {
 		"clientId": "[slack client id]",
 		"clientSecret": "[slack client secret]",
-		"signingSecret": "[slack signing secret]"
+		"signingSecret": "[slack signing secret]",
+		"accessToken": "[slack access token]"
 	},
-	"redirectUrl": "https://[servername].[domain]/",
-	"instance": "[servername]",
 	"dialogflow": {
 		"keyfile": "[/path/to/keyfile.json]",
 		"endpoint": "[dialogflow endpoint address]",

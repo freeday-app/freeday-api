@@ -272,15 +272,16 @@ mongo --eval 'printjson(rs.initiate())'
 
 * Copy `server/conf/conf.sample.json` to `server/conf/conf.json`
 * Fill configuration in `server/conf/conf.json`
+  * `publicUrl` *(Required)* Public URL on which Freeday is reachable (example: `https://freeday.domain.com/`)
   * `port` *(Optional)* Port on which server will run (default is `8787`)
   * `logDir` *(Optional)* Directory where logs will be stored (must have write permissions)
-  * `mongoUrl` *(Required)* MongoDB URL (required, example: mongodb://localhost:27017/freeday)
-  * `mongoTestUrl` *(Required)* MongoDB URL for test database (required, example: mongodb://localhost:27017/freeday-test)
+  * `mongoUrl` *(Required)* MongoDB URL (required, example: `mongodb://localhost:27017/freeday`)
+  * `mongoTestUrl` *(Required)* MongoDB URL for test database (required, example: `mongodb://localhost:27017/freeday-test`)
   * `slack` *(Required)* Freeday's Slack app tokens, can be found on [Slack app page](https://api.slack.com/apps/) in the *Basic information* section
     * `clientId` *(Required)*
     * `clientSecret` *(Required)*
     * `signingSecret` *(Required)*
-  * `redirectUrl` *(Required)* URL to which the user will be redirected to at the end of the Slack OAuth process (Should match with a URL from Slack API configuration)
+    * `accessToken` *(Required)*
   * `instance` *(Required)* The name or the label of this specific instance of Freeday
   * `dialogflow` *(Optional)* Configuration for the bot NLU (if block is missing Dialogflow will be disabled)
     * `keyfile` *(Required)* Location of the keyfile on the machine
@@ -299,6 +300,7 @@ Here's an example of a configuration file:
 
 ```json
 {
+  "publicUrl": "https://freeday.domain.com/",
   "port": "8787",
   "logDir": "/var/log/freeday",
   "mongoUrl": "mongodb://localhost:27017/freeday",
@@ -306,9 +308,9 @@ Here's an example of a configuration file:
   "slack": {
     "clientId": "49835475842.586204420879",
     "clientSecret": "12f458e4e2c5d1245a986b5782c0a15",
-    "signingSecret": "45e182286bf455ac0a925de571c824"
+    "signingSecret": "45e182286bf455ac0a925de571c824",
+    "accessToken": "xoxb-86082730184-10397473810-Gdbvnykg78iTHqvLaNflrkIm"
   },
-  "redirectUrl": "https://cluster.freeday.com/",
   "instance": "odin",
   "dialogflow": {
     "keyfile": "./server/conf/dialogflow.json",
