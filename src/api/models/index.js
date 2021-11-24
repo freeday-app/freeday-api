@@ -15,7 +15,6 @@ const UserModel = require('./user.js');
 const Paginator = require('../../services/paginator.js');
 const Cleanup = require('../../services/cleanup.js');
 const Log = require('../../services/log.js');
-const Configuration = require('../../services/configuration.js');
 
 const Models = {
 
@@ -56,8 +55,9 @@ const Models = {
     // connects to database and loads models
     async connectAndLoadModels(mode = null) {
         Log.info('Initializing MongoDB connection');
-        const { mongoUrl, mongoTestUrl } = Configuration.data;
-        const url = mode === 'test' ? mongoTestUrl : mongoUrl;
+        const url = mode === 'test'
+            ? process.env.MONGO_TEST_URL
+            : process.env.MONGO_URL;
         // connects to mongo database
         const connection = await Mongoose.createConnection(url, {
             useNewUrlParser: true,

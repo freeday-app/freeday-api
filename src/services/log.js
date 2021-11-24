@@ -3,7 +3,6 @@ const Fs = require('fs');
 const Winston = require('winston');
 
 const { format } = Winston;
-const Configuration = require('./configuration.js');
 
 // log header formatter
 const printf = (i) => `${i.timestamp} [${i.level}] ${i.message}`;
@@ -29,7 +28,7 @@ const transports = [
 ];
 
 // controls log directory
-const { data: { logDir } } = Configuration;
+const logDir = process.env.LOG_DIR;
 let fileTransportError = null;
 if (!logDir) {
     fileTransportError = 'no log directory provided';

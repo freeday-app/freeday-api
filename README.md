@@ -270,60 +270,31 @@ mongo --eval 'printjson(rs.initiate())'
 
 ### Server configuration file
 
-* Copy `server/conf/conf.sample.json` to `server/conf/conf.json`
-* Fill configuration in `server/conf/conf.json`
-  * `publicUrl` *(Required)* Public URL on which Freeday is reachable (example: `https://freeday.domain.com/`)
-  * `port` *(Optional)* Port on which server will run (default is `8787`)
-  * `logDir` *(Optional)* Directory where logs will be stored (must have write permissions)
-  * `mongoUrl` *(Required)* MongoDB URL (required, example: `mongodb://localhost:27017/freeday`)
-  * `mongoTestUrl` *(Required)* MongoDB URL for test database (required, example: `mongodb://localhost:27017/freeday-test`)
-  * `slack` *(Required)* Freeday's Slack app tokens, can be found on [Slack app page](https://api.slack.com/apps/) in the *Basic information* section
-    * `clientId` *(Required)*
-    * `clientSecret` *(Required)*
-    * `signingSecret` *(Required)*
-    * `accessToken` *(Required)*
-  * `instance` *(Required)* The name or the label of this specific instance of Freeday
-  * `dialogflow` *(Optional)* Configuration for the bot NLU (if block is missing Dialogflow will be disabled)
-    * `keyfile` *(Required)* Location of the keyfile on the machine
+* Copy `.env.sample` to `.env`
+* Fill configuration in `.env`
+  * `PUBLIC_URL` *(Required)* Public URL on which Freeday API is reachable (example: `https://api.freeday.domain.com/`)
+  * `PORT` *(Optional)* Port on which server will run (default is `8787`)
+  * `LOG_DIR` *(Optional)* Directory where logs will be stored (must have write permissions)
+  * `MONGO_URL` *(Required)* MongoDB URL (required, example: `mongodb://localhost:27017/freeday`)
+  * `MONGO_TEST_URL` *(Required)* MongoDB URL for test database (required, example: `mongodb://localhost:27017/freeday-test`)
+  * `SLACK_ENABLED` *(Optional)* If Slack bot should be enabled (`true` / `false`)
+    * Slack credentials below can be found on [Slack app page](https://api.slack.com/apps/)
+    * `SLACK_CLIENT_ID` *(Optional)*
+    * `SLACK_CLIENT_SECRET` *(Optional)*
+    * `SLACK_SIGNING_SECRET` *(Optional)*
+    * `SLACK_ACCESS_TOKEN` *(Optional)*
+  * `DIALOGFLOW_ENABLED` *(Optional)* If Dialogflow NLU should be enabled in Slack bot
+    * `DIALOGFLOW_KEYFILE` *(Optional)* Location of the keyfile on the machine
+      * If Dialogflow is enabled, a `dialogflow.json` file should contain NLU authentication data
       * Default is `./server/conf/dialogflow.json`
       * If the file is placed somewhere else the path must be absolute
-    * `endpoint` *(Required)* Endpoint of the DialogFlow server
-    * `project` *(Required)* Name of the DialogFlow project
-    * `location` *(Required)* Region of the DialogFlow project
-    * `environment` *(Required)* Environment of the DialogFlow project to use for NLU
-    * `user` *(Required)* User name to connect with
-    * `session` *(Required)* Any string
-    * `language` *(Required)* Language of NLU
-* If Dialogflow is enabled, a `dialogflow.json` file containing NLU authentication data must be placed into `server/conf`
-
-Here's an example of a configuration file:
-
-```json
-{
-  "publicUrl": "https://freeday.domain.com/",
-  "port": "8787",
-  "logDir": "/var/log/freeday",
-  "mongoUrl": "mongodb://localhost:27017/freeday",
-  "mongoTestUrl": "mongodb://localhost:27017/freeday-test",
-  "slack": {
-    "clientId": "49835475842.586204420879",
-    "clientSecret": "12f458e4e2c5d1245a986b5782c0a15",
-    "signingSecret": "45e182286bf455ac0a925de571c824",
-    "accessToken": "xoxb-86082730184-10397473810-Gdbvnykg78iTHqvLaNflrkIm"
-  },
-  "instance": "odin",
-  "dialogflow": {
-    "keyfile": "./server/conf/dialogflow.json",
-    "endpoint": "europe-west2-dialogflow.googleapis.com",
-    "project": "xxxx",
-    "location": "europe-west2",
-    "environment": "Draft",
-    "user": "xxxx",
-    "session": "xxxx",
-    "language": "fr"
-  }
-}
-```
+    * `DIALOGFLOW_ENDPOINT` *(Optional)* Endpoint of the DialogFlow server
+    * `DIALOGFLOW_PROJECT` *(Optional)* Name of the DialogFlow project
+    * `DIALOGFLOW_LOCATION` *(Optional)* Region of the DialogFlow project
+    * `DIALOGFLOW_ENVIRONMENT` *(Optional)* Environment of the DialogFlow project to use for NLU
+    * `DIALOGFLOW_USER` *(Optional)* User name to connect with
+    * `DIALOGFLOW_SESSION` *(Optional)* Any string
+    * `DIALOGFLOW_LANGUAGE` *(Optional)* Language of NLU
 
 ### Install and build
 
@@ -405,8 +376,6 @@ npm run prod
 ```shell
 # run in development mode
 npm run dev
-# or if you don't want slack bot enabled
-npm run dev-no-bot
 ```
 
 * These commands run concurrently the API Express app and the React app in development mode
@@ -429,16 +398,6 @@ MODE=test node app.js
 * Logs level is set to error
 * Use `MODE=test TEST_USER=username:password node app.js` to create a test user in database when starting the app
   * Username and password must be at least 6 characters long otherwise it will be ignored
-
-##### Disable Slack bot
-
-* Can be usefull to prevent Slack API limitations when restarting the app very often with *nodemon*
-
-```shell
-BOT=false node app.js
-# or
-BOT=disabled node app.js
-```
 
 ### Run tests
 

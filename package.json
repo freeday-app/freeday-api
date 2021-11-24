@@ -13,6 +13,7 @@
 		"cron-parser": "^4.1.0",
 		"cross-env": "^7.0.3",
 		"dayjs": "^1.10.7",
+		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"google-auth-library": "^7.10.2",
 		"helmet": "^4.6.0",
@@ -38,8 +39,6 @@
 	"scripts": {
 		"prod": "node src/app.js",
 		"dev": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
-		"dev-no-bot": "cross-env PORT=8787 BOT=false DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
-		"dev-mock": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* MODE=test BOT=false TEST_USER=playwright:playwright nodemon src/app.js",
 		"test": "npm run test-api && npm run test-unit",
 		"test-api": "mocha --exit tests/api/*.test.js",
 		"test-unit": "mocha --exit tests/services/*.test.js",

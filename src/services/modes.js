@@ -19,7 +19,7 @@ const Modes = {
 
     // indique si le bot slack est activé
     botIsEnabled() {
-        return !(process.env.BOT === 'false' || process.env.BOT === 'disabled');
+        return process.env.SLACK_ENABLED === 'true';
     },
 
     // lance tâches pour modes de l'app

@@ -1,7 +1,6 @@
 const dialogflow = require('@google-cloud/dialogflow');
 const DayJS = require('dayjs');
 
-const Configuration = require('./configuration.js');
 const Log = require('./log.js');
 
 const Dialog = {
@@ -19,17 +18,20 @@ const Dialog = {
         'Default Fallback Intent': 'chat.misunderstood',
         'small-qui-es-tu': 'chat.who'
     },
-
     // récupère la configuration et initialise le client DialogFlow et l'endpoint
     init() {
-        const {
-            project, location, environment, user,
-            endpoint, keyfile
-        } = Configuration.data.dialogflow;
-        Dialog.path = `projects/${project}/locations/${location}/agent/environments/${environment}/users/${user}/sessions/freeday`;
+        Dialog.path = `projects/${
+            process.env.DIALOGFLOW_PROJECT
+        }/locations/${
+            process.env.DIALOGFLOW_LOCATION
+        }/agent/environments/${
+            process.env.DIALOGFLOW_ENVIRONMENT
+        }/users/${
+            process.env.DIALOGFLOW_USER
+        }/sessions/freeday`;
         Dialog.client = new dialogflow.SessionsClient({
-            apiEndpoint: endpoint,
-            keyFilename: keyfile
+            apiEndpoint: process.env.DIALOGFLOW_ENDPOINT,
+            keyFilename: process.env.DIALOGFLOW_KEYFILE
         });
         Log.info('Dialogflow NLU initialized');
     },
@@ -42,7 +44,7 @@ const Dialog = {
             queryInput: {
                 text: {
                     text: str,
-                    languageCode: Configuration.data.dialogflow.language
+                    languageCode: process.env.DIALOGFLOW_LANGUAGE
                 }
             }
         };

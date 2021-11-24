@@ -3,7 +3,6 @@ const Mongoose = require('mongoose');
 
 const Models = require('../models/index.js');
 const Schemas = require('./schemas/index.js');
-const Configuration = require('../../services/configuration.js');
 const Tools = require('../../services/tools.js');
 const Validator = require('../../services/validator.js');
 const Log = require('../../services/log.js');
@@ -109,7 +108,7 @@ const Job = {
                         $setOnInsert: {
                             name: jobName,
                             type: 'edit',
-                            instance: Configuration.data.instance,
+                            instance: '',
                             date: DayJS()
                         }
                     },
@@ -189,7 +188,7 @@ const Job = {
     async createEvent(data, session = null) {
         await new (Models.JobEvent)({
             ...data,
-            instance: Configuration.data.instance,
+            instance: '',
             date: DayJS()
         }).save({ session });
     }

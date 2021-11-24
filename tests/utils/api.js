@@ -30,7 +30,7 @@ const API = {
         const password = Tools.generateRandomPassword(10);
         // variable environnement mode test
         process.env.MODE = 'test';
-        process.env.BOT = 'false';
+        process.env.SLACK_ENABLED = 'false';
         // variable environnement pour création user de test
         process.env.TEST_USER = `${username}:${password}`;
         // récupère instance app

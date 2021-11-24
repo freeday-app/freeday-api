@@ -1,6 +1,10 @@
 // timezone
 process.env.TZ = 'GMT';
 
+// initialise configuration dotenv
+require('dotenv').config();
+// TODO configuration integrity should be checked somehow
+
 const DayJS = require('dayjs');
 const CustomParseFormat = require('dayjs/plugin/customParseFormat.js');
 const IsSameOrBefore = require('dayjs/plugin/isSameOrBefore.js');
@@ -16,7 +20,6 @@ const Routes = require('./api/routes/index.js');
 const Errors = require('./services/errors.js');
 const Log = require('./services/log.js');
 const Modes = require('./services/modes.js');
-const Configuration = require('./services/configuration.js');
 const Jobs = require('./services/jobs.js');
 
 // initialise dayjs plugins
@@ -42,10 +45,6 @@ App.use(Helmet());
     try {
         // mode de l'app
         const mode = Modes.current();
-
-        // charge configuration
-        Log.info('Loading configuration');
-        await Configuration.load(mode);
 
         // initialise modèles et connecte mongodb
         await Models.init(mode);
@@ -78,8 +77,7 @@ App.use(Helmet());
         await Jobs.init();
 
         // app listening
-        const { port: confPort } = Configuration.data;
-        const port = process.env.PORT || confPort || 8787;
+        const port = process.env.PORT ?? 8787;
         App.listen(port, () => {
             Log.info(`Freeday running on port ${port}`);
             // évènement app prête pour tests
@@ -88,7 +86,7 @@ App.use(Helmet());
         });
     } catch (err) {
         Log.error('Error while starting app');
-        Log.error(err.stack || err.message || err);
+        Log.error(err.stack);
         process.exit();
     }
 })();

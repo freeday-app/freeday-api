@@ -1,7 +1,6 @@
 const { WebClient, ErrorCode } = require('@slack/web-api');
 const { App: SlackApp, ExpressReceiver } = require('@slack/bolt');
 
-const Configuration = require('../../services/configuration.js');
 const Log = require('../../services/log.js');
 const Models = require('../../api/models/index.js');
 const Tools = require('../../services/tools.js');
@@ -30,21 +29,15 @@ const SDK = {
     // async init(App, auth) {
     async init(App) {
         try {
-            const {
-                slack: {
-                    signingSecret,
-                    accessToken
-                }
-            } = Configuration.data;
             // initializes web clients
             // SDK.initWebClient(auth);
-            SDK.initWebClient(accessToken);
+            SDK.initWebClient(process.env.SLACK_ACCESS_TOKEN);
             // initializes Slack application
             SDK.app = new SlackApp({
                 authorize: () => ({ botToken: null }),
                 ignoreSelf: false,
                 receiver: new ExpressReceiver({
-                    signingSecret,
+                    signingSecret: process.env.SLACK_SIGNING_SECRET,
                     endpoints: '/'
                 })
             });
@@ -113,14 +106,9 @@ const SDK = {
     // checks slack oauth code validity and returns result if valid
     async checkOAuthCode(code) {
         try {
-            const {
-                slack: {
-                    clientId, clientSecret
-                }
-            } = Configuration.data;
             const result = await (new WebClient()).oauth.v2.access({
-                client_id: clientId,
-                client_secret: clientSecret,
+                client_id: process.env.SLACK_CLIENT_ID,
+                client_secret: process.env.SLACK_CLIENT_SECRET,
                 redirect_uri: SDK.redirectUrl(),
                 code
             });
@@ -142,7 +130,7 @@ const SDK = {
 
     // generates redirect uri
     getRedirectUrl() {
-        return Tools.buildUrl(Configuration.data.redirectUrl, 'register');
+        return Tools.buildUrl(process.env.PUBLIC_URL, 'register');
     }
 };
 
