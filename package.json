@@ -2,8 +2,7 @@
 	"name": "freeday-api",
 	"version": "1.0.0",
 	"author": "Coddity",
-	"description": "Dayoff management app with chat bots",
-	"private": true,
+	"description": "Freeday API",
 	"dependencies": {
 		"@google-cloud/dialogflow": "^4.5.0",
 		"@slack/bolt": "^3.8.1",
