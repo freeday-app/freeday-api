@@ -541,7 +541,6 @@ Errors thrown by the API come with:
 * API Swagger documentation is located in the `docs` directory and it contains:
   * Swagger YAML specification files
   * A React app serving Swagger-UI
-* Public Freeday API documentation is available at [https://docs.freeday.coddity.com/](https://docs.freeday.coddity.com/)
 
 [Back to top](#palm_tree-freeday)
 
