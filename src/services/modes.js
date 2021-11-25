@@ -55,8 +55,7 @@ const Modes = {
                     password: hash,
                     language: 'en'
                 }).save();
-                const safePassword = password.replace(/./g, '*');
-                Log.info(`Test user created with username '${username}' and password '${safePassword}'`);
+                Log.info(`Test user '${username}' created`);
             }
             // set le niveau de log à erreur
             Log.info('Switching console level to error');

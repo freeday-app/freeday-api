@@ -10,10 +10,6 @@ const jobEventSchema = Mongoose.Schema({
         required: true,
         enum: ['edit', 'execution', 'failedExecution']
     },
-    instance: {
-        type: String,
-        required: true
-    },
     date: {
         type: Date,
         required: true

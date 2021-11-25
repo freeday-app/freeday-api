@@ -33,7 +33,6 @@ const Configuration = {
         } else {
             conf = conf.toJSON();
         }
-
         return conf;
     },
 
@@ -66,19 +65,25 @@ const Configuration = {
 
     async upsertProxy(data) {
         // parses conf data
-        Configuration.parseData(data);
-
+        let confData = Configuration.parseData(data);
+        // if no configuration in database merge default
+        const existingConf = await Models.Configuration.findOne();
+        if (!existingConf) {
+            confData = {
+                ...Configuration.default,
+                ...confData
+            };
+        }
         // checks if the bot has access to the referrer of the request
-        if (data.slackReferrer) {
-            const channel = await SlackDataController.getChannelProxy(data.slackReferrer);
+        if (confData.slackReferrer) {
+            const channel = await SlackDataController.getChannelProxy(confData.slackReferrer);
             if (!channel || !channel.isMember) {
                 throw new InvalidSlackReferrerError('This channel cannot be set as referrer');
             }
         }
-
         // saves configuration
         const savedConf = await Models.Configuration.findOneAndUpdate({}, {
-            $set: data
+            $set: confData
         }, {
             upsert: true,
             new: true,
@@ -96,10 +101,14 @@ const Configuration = {
 
     // applique formatage sur données configuration
     parseData(conf) {
-        // removes duplicate and sort work days array
         if (conf.workDays) {
-            conf.workDays = [...new Set(conf.workDays)].sort();
+            return {
+                ...conf,
+                // removes duplicate and sort work days array
+                workDays: [...new Set(conf.workDays)].sort()
+            };
         }
+        return conf;
     }
 
 };

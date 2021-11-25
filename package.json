@@ -38,6 +38,7 @@
 	"scripts": {
 		"prod": "node src/app.js",
 		"dev": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
+		"mode-test": "cross-env MODE=test TEST_USER=teste2e:teste2e PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
 		"test": "npm run test-api && npm run test-unit",
 		"test-api": "mocha --exit tests/api/*.test.js",
 		"test-unit": "mocha --exit tests/services/*.test.js",
