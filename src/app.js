@@ -11,7 +11,7 @@ const IsSameOrBefore = require('dayjs/plugin/isSameOrBefore.js');
 const IsoWeek = require('dayjs/plugin/isoWeek.js');
 
 const Express = require('express');
-// const Cors = require('cors');
+const Cors = require('cors');
 const Helmet = require('helmet');
 
 const Bot = require('./bot/index.js');
@@ -31,8 +31,8 @@ DayJS.extend(IsoWeek);
 const App = Express();
 
 // ouvre cors
-// App.use(Cors());
-// App.options('*', Cors());
+App.use(Cors());
+App.options('*', Cors());
 
 // needed to forward ip through proxy
 App.enable('trust proxy');
