@@ -272,7 +272,7 @@ mongo --eval 'printjson(rs.initiate())'
 
 * Copy `.env.sample` to `.env`
 * Fill configuration in `.env`
-  * `PUBLIC_URL` *(Required)* Public URL on which Freeday API is reachable (example: `https://api.freeday.domain.com/`)
+  * `API_PUBLIC_URL` *(Required)* Public URL on which Freeday API is reachable (example: `https://api.freeday.domain.com/`)
   * `PORT` *(Optional)* Port on which server will run (default is `8787`)
   * `LOG_DIR` *(Optional)* Directory where logs will be stored (must have write permissions)
   * `MONGO_URL` *(Required)* MongoDB URL (required, example: `mongodb://localhost:27017/freeday`)
