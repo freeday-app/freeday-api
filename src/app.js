@@ -21,6 +21,7 @@ const Errors = require('./services/errors.js');
 const Log = require('./services/log.js');
 const Modes = require('./services/modes.js');
 const Jobs = require('./services/jobs.js');
+const Auth = require('./api/controllers/auth.js');
 
 // initialise dayjs plugins
 DayJS.extend(CustomParseFormat);
@@ -72,6 +73,9 @@ App.use(Helmet());
 
         // gère modes de l'app
         await Modes.run();
+
+        // initialise parcours de bienvenue
+        await Auth.initiateWelcome();
 
         // lancement des jobs récurrents
         await Jobs.init();

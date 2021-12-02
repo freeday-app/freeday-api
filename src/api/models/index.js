@@ -59,13 +59,19 @@ const Models = {
             ? process.env.MONGO_TEST_URL
             : process.env.MONGO_URL;
         // connects to mongo database
-        const connection = await Mongoose.createConnection(url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        try {
+            await Mongoose.connect(url, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                serverSelectionTimeoutMS: 10000
+            });
+        } catch (err) {
+            Log.error('Could not connect to MongoDB');
+            process.exit();
+        }
         // creates and loads models
         for (const name of Object.keys(Models.schemas)) {
-            Models[name] = connection.model(name, Models.schemas[name]);
+            Models[name] = Mongoose.model(name, Models.schemas[name]);
         }
         Log.info('MongoDB connection initialized');
         // clears test database if test mode

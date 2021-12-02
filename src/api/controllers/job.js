@@ -1,5 +1,4 @@
 const DayJS = require('dayjs');
-const Mongoose = require('mongoose');
 
 const Models = require('../models/index.js');
 const Schemas = require('./schemas/index.js');
@@ -118,79 +117,51 @@ const Job = {
         ));
     },
 
-    // this method will be called in cuncurrency between all Freeday instances
-    // it will try to lock a job in MongoDB
-    // if sucessful we can check and potentially run the job before releasing it
-    // else, we just do nothing as the job is being taken care of by another instance
     async acquire(jobName, jobHandler) {
-        const session = await Models.Job.startSession();
-        session.startTransaction();
-        try {
-            // Updates the last jobEvent for this job with a new 'lock' value
-            // to lock the document for this transaction.
-            // (MongoDB only locks documents when writing, not reading)
-            // If the document was already locked by another Freeday instance,
-            // MongoDB will throw a WriteConflict exception, so we can then skip that job.
-            const lastJobEvent = await Models.JobEvent.findOneAndUpdate({
-                name: jobName
-            }, {
-                $set: {
-                    lock: Mongoose.Types.ObjectId()
-                }
-            }, {
-                sort: { date: -1 },
-                runValidators: true,
-                session
-            });
-            const lastJobEventJson = lastJobEvent.toJSON();
-
-            const job = await Models.Job.findOne({ name: jobName });
-            const jobJson = job.toJSON();
-
-            if (Tools.jobShouldRun(jobJson, lastJobEventJson.date)) {
-                // runs the job
-                try {
-                    Log.info(`Running job '${jobName}'`);
-                    await jobHandler();
-
-                    // when the job has completed, we log a sucessful execution
-                    await Job.createEvent({
-                        name: jobName,
-                        type: 'execution'
-                    }, session);
-                } catch (err) {
-                    // if any exception is thrown when running the job
-                    // we log a failed execution
-                    await Job.createEvent({
-                        name: jobName,
-                        type: 'failedExecution'
-                    }, session);
-                    Log.error(`Unexpected exception when running the job '${jobName}'`);
-                    Log.error(err.stack);
-                }
-                await session.commitTransaction();
-            } else {
-                await session.abortTransaction();
+        const lastJobEvent = await Models.JobEvent.findOneAndUpdate({
+            name: jobName
+        }, {
+            sort: {
+                date: -1
             }
-        } catch (err) {
-            // MongoDB WriteConflict (112): The job was acquired by another instance
-            // we don't need to do anything
-            if (!err.code || err.code !== 112) {
-                Log.error(`Unexpected exception when checking the job '${jobName}'`);
+        });
+        const lastJobEventJson = lastJobEvent.toJSON();
+
+        const job = await Models.Job.findOne({
+            name: jobName
+        });
+        const jobJson = job.toJSON();
+
+        if (Tools.jobShouldRun(jobJson, lastJobEventJson.date)) {
+            // runs the job
+            try {
+                Log.info(`Running job '${jobName}'`);
+                await jobHandler();
+
+                // when the job has completed, we log a sucessful execution
+                await Job.createEvent({
+                    name: jobName,
+                    type: 'execution'
+                });
+            } catch (err) {
+                // if any exception is thrown when running the job we log a failed execution
+                await Job.createEvent({
+                    name: jobName,
+                    type: 'failedExecution'
+                });
+                Log.error(`Unexpected exception when running the job '${jobName}'`);
                 Log.error(err.stack);
             }
-        } finally {
-            session.endSession();
         }
     },
 
     // adds a new entry to the JobEvent collection
-    async createEvent(data, session = null) {
+    async createEvent(data) {
         await new (Models.JobEvent)({
             ...data,
             instance: '',
             date: DayJS()
-        }).save({ session });
+        }).save();
     }
 
 };

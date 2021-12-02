@@ -13,9 +13,6 @@ const jobEventSchema = Mongoose.Schema({
     date: {
         type: Date,
         required: true
-    },
-    lock: {
-        type: String
     }
 }, {
     collection: 'jobevents',
