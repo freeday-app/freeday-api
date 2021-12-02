@@ -28,7 +28,7 @@ const transports = [
 ];
 
 // controls log directory
-const logDir = process.env.LOG_DIR;
+const logDir = process.env.API_LOG_DIR;
 let fileTransportError = null;
 if (!logDir) {
     fileTransportError = 'no log directory provided';

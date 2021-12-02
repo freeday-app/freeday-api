@@ -274,8 +274,8 @@ mongo --eval 'printjson(rs.initiate())'
 * Fill configuration in `.env`
   * `FRONT_PUBLIC_URL` *(Required)* Public URL on which Freeday web front is reachable (example: `https://freeday.domain.com/` or `https://localhost:8788/`)
   * `API_PUBLIC_URL` *(Required)* Public URL on which Freeday API is reachable (example: `https://api.freeday.domain.com/` or `https://localhost:8787/`)
-  * `PORT` *(Optional)* Port on which server will run (default is `8787`)
-  * `LOG_DIR` *(Optional)* Directory where logs will be stored (must have write permissions)
+  * `API_PORT` *(Optional)* Port on which server will run (default is `8787`)
+  * `API_LOG_DIR` *(Optional)* Directory where logs will be stored (must have write permissions)
   * `MONGO_URL` *(Required)* MongoDB URL (required, example: `mongodb://localhost:27017/freeday`)
   * `MONGO_TEST_URL` *(Required)* MongoDB URL for test database (required, example: `mongodb://localhost:27017/freeday-test`)
   * `SLACK_ENABLED` *(Optional)* If Slack bot should be enabled (`true` / `false`)
