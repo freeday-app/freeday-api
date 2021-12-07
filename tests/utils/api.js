@@ -1,11 +1,9 @@
-const Path = require('path');
+require('dotenv').config();
+
 const Chai = require('chai');
 const ChaiHttp = require('chai-http');
 
 Chai.use(ChaiHttp);
-
-global.pathRoot = (name) => Path.join(__dirname, '../../server', name); // eslint-disable-line
-global.requireRoot = (name) => require(pathRoot(name)); // eslint-disable-line
 
 const Tools = require('../../src/services/tools.js');
 const SlackNotify = require('../../src/bot/utils/notify.js');

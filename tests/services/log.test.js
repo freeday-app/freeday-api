@@ -4,7 +4,6 @@ const { expect } = Chai;
 const Path = require('path');
 const Fs = require('fs');
 
-const Conf = require('../../src/conf/conf.json');
 const Log = require('../../src/services/log.js');
 
 describe('[Services] Log', () => {
@@ -14,24 +13,21 @@ describe('[Services] Log', () => {
         Log.toggleTransport('file', true, 'info');
         // on écrit un log
         Log.info(testText);
-        // on regarde si le fichier où les log sont écrit existe
-        const pathFile = Path.join(Conf.logDir, 'freeday.log');
+        // fichier de log
+        const pathFile = Path.join(process.env.API_LOG_DIR, 'freeday.log');
         // on regarde si on a bien écrit dans le log
         const fileExists = Fs.existsSync(pathFile);
-        let text;
+        expect(fileExists).to.be.true;
         let logWritten = false;
         const data = Fs.readFileSync(pathFile, 'UTF-8');
         if (data) {
-            text = data.split('\n');
+            const text = data.split('\n');
             logWritten = text[text.length - 2].split(testText).length === 2;
-        }
-        expect(fileExists).to.be.true;
-        expect(logWritten).to.be.true;
-        // on efface le message quand on a écrit
-        if (text) {
+            // on efface le message quand on a écrit
             text.splice(text.length - 2, 1);
             Fs.writeFileSync(pathFile, text.join('\n'));
         }
+        expect(logWritten).to.be.true;
         // on remet le niveau de log à erreur
         Log.toggleTransport('file', true, 'error');
     });

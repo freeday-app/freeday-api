@@ -277,22 +277,20 @@ describe('[Services] Tools', () => {
         it('Should list files in directory', () => {
             const expectedFiles = [
                 'cleanup.js',
-                'configuration.js',
-                'dayoff.js',
-                'log.js',
-                'tools.js',
-                'modes.js',
-                'validator.js',
-                'paginator.js',
-                'statsLog.js',
                 'crypt.js',
-                'language.js',
+                'dayoff.js',
                 'dialog.js',
-                'jobs.js'
+                'jobs.js',
+                'language.js',
+                'log.js',
+                'modes.js',
+                'paginator.js',
+                'tools.js',
+                'validator.js'
             ];
             const excludedFiles = [
                 'errors.js',
-                'init'
+                'statsLog'
             ];
             const files = Tools.listFiles(Path.join(__dirname, '../../src/services'), excludedFiles);
             expect(files).to.have.members(expectedFiles);

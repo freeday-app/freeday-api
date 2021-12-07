@@ -4,7 +4,6 @@ const { assertLastLogEntryValues } = require('../utils/statslog.js');
 const SlackAuthController = require('../../src/api/controllers/slackAuth.js');
 const SlackSDK = require('../../src/bot/utils/sdk.js');
 const Data = require('./data/global.data.js');
-const ConfigurationData = require('../../src/conf/conf.json');
 
 const slackUsersById = {};
 for (const user of Data.slackUsers) {
@@ -316,7 +315,7 @@ describe('[API] Slack', () => {
 
     describe('GET /api/slack/auth', () => {
         it('Should return Slack OAuth URL', async () => {
-            const expectedUrl = encodeURI(ConfigurationData.redirectUrl);
+            const expectedUrl = encodeURI(process.env.API_PUBLIC_URL);
             const response = await API.request()
                 .get('/api/slack/auth');
             expect(response).to.have.status(200);

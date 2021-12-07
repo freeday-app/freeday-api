@@ -1,0 +1,58 @@
+kind: pipeline
+type: docker
+name: freeday-ci
+
+services:
+- name: mongo
+  image: mongo:latest
+
+steps:
+# dependencies
+- name: dependencies
+  image: node:14-alpine
+  pull: if-not-exists
+  commands:
+  - npm i
+  when:
+    branch:
+    - master
+    - dev
+# linters
+- name: lint
+  image: node:14-alpine
+  pull: if-not-exists
+  commands:
+  - npm run lint
+  depends_on:
+  - dependencies
+  when:
+    branch:
+    - master
+    - dev
+# tests
+- name: test
+  image: node:14-alpine
+  pull: if-not-exists
+  commands:
+  - cp .env.ci .env
+  - mkdir -p /var/log/freeday
+  - npm run test
+  depends_on:
+  - dependencies
+  when:
+    branch:
+    - master
+    - dev
+# sonarqube
+- name: sonarqube
+  image: aosapps/drone-sonar-plugin
+  settings:
+    sonar_host:
+      from_secret: sonar_host
+    sonar_token:
+      from_secret: sonar_token
+  depends_on:
+  - dependencies
+  when:
+    branch:
+    - dev
