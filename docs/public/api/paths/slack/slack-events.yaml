@@ -1,7 +1,0 @@
-# /api/slack/events
-
-post:
-  tags:
-    - 'Slack'
-  summary: 'Slack events endpoint'
-  description: 'Reserved for Slack events and interactivity'
