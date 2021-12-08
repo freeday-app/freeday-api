@@ -31,9 +31,12 @@ DayJS.extend(IsoWeek);
 // express
 const App = Express();
 
-// ouvre cors
-App.use(Cors());
-App.options('*', Cors());
+// cors
+if (process.env.API_ENABLE_CORS === 'true') {
+    Log.info('Enabling CORS');
+    App.use(Cors());
+    App.options('*', Cors());
+}
 
 // needed to forward ip through proxy
 App.enable('trust proxy');
