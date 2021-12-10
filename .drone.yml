@@ -56,3 +56,16 @@ steps:
   when:
     branch:
     - dev
+# docker publish
+- name: docker  
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_hub_username
+    password:
+      from_secret: docker_hub_password
+    repo: freedayapp/freeday-api
+    tags: latest
+  when:
+    event:
+    - tag
