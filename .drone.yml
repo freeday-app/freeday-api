@@ -2,22 +2,20 @@ kind: pipeline
 type: docker
 name: freeday-api-ci
 
+trigger:
+  branch:
+  - dev
+
 services:
 - name: mongo
   image: mongo:latest
 
 steps:
-# dependencies
 - name: dependencies
   image: node:14-alpine
   pull: if-not-exists
   commands:
   - npm i
-  when:
-    branch:
-    - master
-    - dev
-# linters
 - name: lint
   image: node:14-alpine
   pull: if-not-exists
@@ -25,11 +23,6 @@ steps:
   - npm run lint
   depends_on:
   - dependencies
-  when:
-    branch:
-    - master
-    - dev
-# tests
 - name: test
   image: node:14-alpine
   pull: if-not-exists
@@ -39,11 +32,6 @@ steps:
   - npm run test
   depends_on:
   - dependencies
-  when:
-    branch:
-    - master
-    - dev
-# sonarqube
 - name: sonarqube
   image: aosapps/drone-sonar-plugin
   settings:
@@ -53,19 +41,25 @@ steps:
       from_secret: sonar_token
   depends_on:
   - dependencies
-  when:
-    branch:
-    - dev
-# docker publish
+
+---
+kind: pipeline
+type: docker
+name: freeday-api-publish
+
+trigger:
+  event:
+  - tag
+
+steps:
 - name: docker  
   image: plugins/docker
   settings:
+    repo: freedayapp/freeday-api
+    tags:
+    - ${DRONE_TAG}
+    - latest
     username:
       from_secret: docker_hub_username
     password:
       from_secret: docker_hub_password
-    repo: freedayapp/freeday-api
-    tags: latest
-  when:
-    event:
-    - tag
