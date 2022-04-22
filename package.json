@@ -1,6 +1,6 @@
 {
 	"name": "freeday-api",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": "Coddity",
 	"description": "Freeday API",
 	"dependencies": {

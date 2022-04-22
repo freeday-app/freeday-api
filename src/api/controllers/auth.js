@@ -1,5 +1,4 @@
 const DayJS = require('dayjs');
-const Path = require('path');
 
 const Models = require('../models/index.js');
 const Schemas = require('./schemas/index.js');
@@ -318,7 +317,7 @@ const Auth = {
         // encodes token in base64
         const base64Token = Crypt.encodeBase64(initToken, false);
         // builds url
-        return Path.join(apiUrl, `/welcome/${base64Token}`);
+        return new URL(`/welcome/${base64Token}`, apiUrl).href;
     }
 
 };
