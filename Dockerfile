@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # install dependencies
-RUN npm install
+RUN npm install --only=prod
 
 # export port
 EXPOSE 8787
