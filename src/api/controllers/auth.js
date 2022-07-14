@@ -313,7 +313,7 @@ const Auth = {
 
     // builds welcome url
     buildWelcomeUrl(initToken) {
-        const apiUrl = process.env.FRONT_PUBLIC_URL;
+        const apiUrl = process.env.PUBLIC_URL;
         // encodes token in base64
         const base64Token = Crypt.encodeBase64(initToken, false);
         // builds url

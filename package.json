@@ -3,6 +3,16 @@
 	"version": "1.0.6",
 	"author": "Coddity",
 	"description": "Freeday API",
+	"scripts": {
+		"prod": "node src/app.js",
+		"dev": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
+		"dev-test": "cross-env MODE=test TEST_USER=teste2e:teste2e PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
+		"test": "npm run test-api && npm run test-unit",
+		"test-api": "mocha --exit --timeout 10000 tests/api/*.test.js",
+		"test-unit": "mocha --exit --timeout 10000 tests/services/*.test.js",
+		"lint": "eslint .",
+		"lint-fix": "eslint . --fix"
+	},
 	"dependencies": {
 		"@google-cloud/dialogflow": "^4.7.0",
 		"@slack/bolt": "^3.11.0",
@@ -31,15 +41,5 @@
 		"eslint-plugin-import": "^2.26.0",
 		"mocha": "^9.2.2",
 		"nodemon": "^2.0.15"
-	},
-	"scripts": {
-		"prod": "node src/app.js",
-		"dev": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
-		"mode-test": "cross-env MODE=test TEST_USER=teste2e:teste2e PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
-		"test": "npm run test-api && npm run test-unit",
-		"test-api": "mocha --exit --timeout 10000 tests/api/*.test.js",
-		"test-unit": "mocha --exit --timeout 10000 tests/services/*.test.js",
-		"lint": "eslint .",
-		"lint-fix": "eslint . --fix"
 	}
 }

@@ -68,9 +68,6 @@ App.use(Helmet());
         // errors middleware
         App.use(Errors.middleware);
 
-        // initialise route de ping
-        Routes.setPing(App);
-
         // initialise routes
         Routes.set(App);
 

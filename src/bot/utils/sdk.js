@@ -130,7 +130,7 @@ const SDK = {
 
     // generates redirect uri
     getRedirectUrl() {
-        return Tools.buildUrl(process.env.API_PUBLIC_URL, 'register');
+        return Tools.buildUrl(process.env.PUBLIC_URL, 'register');
     }
 };
 
