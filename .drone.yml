@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: freeday-api-ci
+name: freeday-api
 
 trigger:
   branch:
@@ -33,7 +33,7 @@ steps:
   depends_on:
   - dependencies
 - name: sonarqube
-  image: aosapps/drone-sonar-plugin
+  image: pitininja/drone-sonar-plugin:latest
   settings:
     sonar_host:
       from_secret: sonar_host
@@ -45,17 +45,24 @@ steps:
 ---
 kind: pipeline
 type: docker
-name: freeday-api-publish
+name: freeday-docker
 
 trigger:
   event:
   - tag
 
+clone:
+  disable: true
+
 steps:
+- name: clone
+  image: alpine/git
+  commands:
+  - git clone https://github.com/freeday-app/freeday-docker.git .
 - name: docker  
   image: plugins/docker
   settings:
-    repo: freedayapp/freeday-api
+    repo: freedayapp/freeday
     tags:
     - ${DRONE_TAG}
     - latest
