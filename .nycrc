@@ -1,0 +1,21 @@
+{
+    "cache": false,
+    "check-coverage": false,
+    "extension": [
+        ".js"
+    ],
+    "include": [
+        "src/**/*.js"
+    ],
+    "exclude": [
+        "src/bot/**/*.js"
+    ],
+    "sourceMap": true,
+    "reporter": [
+        "lcov",
+        "text",
+        "text-summary"
+    ],
+    "all": true,
+    "instrument": true
+}

@@ -1,5 +1,7 @@
-node_modules/
-web/
+node_modules
+coverage
+.nyc_output
+web
 
 npm-debug.log
 .DS_Store
