@@ -14,7 +14,7 @@ describe('[Services] Log', () => {
         // on écrit un log
         Log.info(testText);
         // fichier de log
-        const pathFile = Path.join(process.env.API_LOG_DIR, 'freeday.log');
+        const pathFile = Path.join(process.env.LOG_DIR, 'freeday.log');
         // on regarde si on a bien écrit dans le log
         const fileExists = Fs.existsSync(pathFile);
         expect(fileExists).to.be.true;
