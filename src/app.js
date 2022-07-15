@@ -11,7 +11,6 @@ const IsSameOrBefore = require('dayjs/plugin/isSameOrBefore.js');
 const IsoWeek = require('dayjs/plugin/isoWeek.js');
 
 const Express = require('express');
-const Cors = require('cors');
 const Helmet = require('helmet');
 
 const Bot = require('./bot/index.js');
@@ -30,13 +29,6 @@ DayJS.extend(IsoWeek);
 
 // express
 const App = Express();
-
-// cors
-if (process.env.API_ENABLE_CORS === 'true') {
-    Log.info('Enabling CORS');
-    App.use(Cors());
-    App.options('*', Cors());
-}
 
 // needed to forward ip through proxy
 App.enable('trust proxy');
@@ -81,7 +73,7 @@ App.use(Helmet());
         await Jobs.init();
 
         // app listening
-        const port = process.env.API_PORT ?? 8787;
+        const port = process.env.PORT ?? 8787;
         App.listen(port, () => {
             Log.info(`Freeday running on port ${port}`);
             // évènement app prête pour tests

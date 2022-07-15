@@ -16,7 +16,6 @@
 		"@slack/bolt": "^3.12.0",
 		"@slack/web-api": "^6.7.2",
 		"bcrypt": "^5.0.1",
-		"cors": "^2.8.5",
 		"cron-parser": "^4.5.0",
 		"cross-env": "^7.0.3",
 		"dayjs": "^1.11.3",
