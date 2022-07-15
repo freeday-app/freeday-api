@@ -315,7 +315,7 @@ describe('[API] Slack', () => {
 
     describe('GET /api/slack/auth', () => {
         it('Should return Slack OAuth URL', async () => {
-            const expectedUrl = encodeURI(process.env.API_PUBLIC_URL);
+            const expectedUrl = encodeURI(process.env.PUBLIC_URL);
             const response = await API.request()
                 .get('/api/slack/auth');
             expect(response).to.have.status(200);
