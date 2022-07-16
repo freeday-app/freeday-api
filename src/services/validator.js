@@ -156,8 +156,6 @@ const Validator = {
                 return Tools.isSlackTeamId(value);
             case 'Date':
                 return DayJS(value, 'YYYY-MM-DD', true).isValid();
-            case 'Url':
-                return Tools.isUrl(value);
             case 'Base64':
                 return Tools.isBase64(value);
             case 'String':
