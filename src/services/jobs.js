@@ -35,7 +35,6 @@ const Jobs = {
 
     // this function is called every minute to launch jobs
     async invoke() {
-        Log.info('Invoking Freeday jobs');
         await JobController.acquire('monthlyRecap', Jobs.jobMonthlyRecap);
     },
 
