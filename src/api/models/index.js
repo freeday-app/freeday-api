@@ -100,7 +100,7 @@ const Models = {
 
     // creates a test user when in test environment
     async createTestUser() {
-        if (env.ENVIRONMENT === 'test') {
+        if (env.ENVIRONMENT === 'test' && env.TEST_USERNAME && env.TEST_PASSWORD) {
             const hash = await Crypt.hashPassword(env.TEST_PASSWORD);
             await new Models.User({
                 username: env.TEST_USERNAME,
