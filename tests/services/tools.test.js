@@ -259,20 +259,6 @@ describe('[Services] Tools', () => {
         });
     });
 
-    describe('isUrl', () => {
-        it('Should check if value is a valid URL', () => {
-            expect(Tools.isUrl('http://some.url')).to.be.true;
-            expect(Tools.isUrl('https://some.url/some/path')).to.be.true;
-            expect(Tools.isUrl('http://some.url:1234')).to.be.true;
-            expect(Tools.isUrl('')).to.be.false;
-            expect(Tools.isUrl('aze')).to.be.false;
-            expect(Tools.isUrl(123)).to.be.false;
-            expect(Tools.isUrl(null)).to.be.false;
-            expect(Tools.isUrl(true)).to.be.false;
-            expect(Tools.isUrl(undefined)).to.be.false;
-        });
-    });
-
     describe('listFiles', () => {
         it('Should list files in directory', () => {
             const expectedFiles = [

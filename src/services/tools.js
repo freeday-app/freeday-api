@@ -123,10 +123,6 @@ const Tools = {
         return typeof string === 'string' && string.length >= minLength && (!maxLength || string.length <= maxLength);
     },
 
-    isUrl(string) {
-        return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/.test(string);
-    },
-
     isValidTheme(string) {
         return ['light', 'dark'].includes(string);
     },
