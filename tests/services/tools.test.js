@@ -94,10 +94,10 @@ describe('[Services] Tools', () => {
         });
     });
 
-    describe('generateRandomPassword', () => {
-        it('Should generate a random password', () => {
-            const password = Tools.generateRandomPassword(10);
-            expect(password).to.match(/^[.a-z0-9]{10}$/);
+    describe('generateRandomString', () => {
+        it('Should generate a random string', () => {
+            const string = Tools.generateRandomString(10);
+            expect(string).to.have.lengthOf(10);
         });
     });
 

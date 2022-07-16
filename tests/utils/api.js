@@ -70,8 +70,8 @@ const API = {
     // creates test user
     async createUser() {
         // creates test user
-        const username = `test${Tools.generateRandomPassword(6)}`;
-        const password = Tools.generateRandomPassword(10);
+        const username = `test${Tools.generateRandomString(6)}`;
+        const password = Tools.generateRandomString(10);
         const hash = await Crypt.hashPassword(password);
         await new Models.User({
             username,

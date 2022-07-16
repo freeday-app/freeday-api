@@ -2,7 +2,9 @@ const CronParser = require('cron-parser');
 const Fs = require('fs');
 const DayJS = require('dayjs');
 const Path = require('path');
-const RandToken = require('rand-token');
+const { nanoid, customAlphabet } = require('nanoid');
+
+const tokenGenerator = customAlphabet('1234567890abcdef', 32);
 
 const Tools = {
 
@@ -54,12 +56,12 @@ const Tools = {
         return name.toLowerCase().split(' ').map((s) => Tools.ucfirst(s)).join(' ');
     },
 
-    generateRandomPassword(length = 8) {
-        return Math.random().toString(36).slice(-length);
+    generateRandomString(length = 8) {
+        return nanoid(length);
     },
 
-    async generateToken() {
-        return RandToken.generate(32);
+    generateToken() {
+        return tokenGenerator();
     },
 
     async getFileContent(path) {

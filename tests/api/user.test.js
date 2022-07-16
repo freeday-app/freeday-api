@@ -70,8 +70,8 @@ describe('[API] Users', () => {
         });
 
         it('Should create a new user', async () => {
-            const username = `test${Tools.generateRandomPassword(6)}`;
-            const password = Tools.generateRandomPassword(10);
+            const username = `test${Tools.generateRandomString(6)}`;
+            const password = Tools.generateRandomString(10);
             const response = await API.request()
                 .post('/api/users')
                 .send({
@@ -187,16 +187,16 @@ describe('[API] Users', () => {
             const editData = [{
                 language: 'fr',
                 theme: 'light',
-                username: `test${Tools.generateRandomPassword(6)}`,
-                password: Tools.generateRandomPassword(10)
+                username: `test${Tools.generateRandomString(6)}`,
+                password: Tools.generateRandomString(10)
             }, {
                 language: 'en',
                 theme: 'dark'
             }, {
                 language: 'fr',
                 theme: 'light',
-                username: `test${Tools.generateRandomPassword(6)}`,
-                password: Tools.generateRandomPassword(10)
+                username: `test${Tools.generateRandomString(6)}`,
+                password: Tools.generateRandomString(10)
             }];
             const updateUser = async (data) => {
                 const userResponse = await API.request()
@@ -231,8 +231,8 @@ describe('[API] Users', () => {
         });
 
         it('Should edit self user', async () => {
-            const username = `test${Tools.generateRandomPassword(6)}`;
-            const password = Tools.generateRandomPassword(10);
+            const username = `test${Tools.generateRandomString(6)}`;
+            const password = Tools.generateRandomString(10);
             const response = await API.request()
                 .post('/api/users/me')
                 .send({

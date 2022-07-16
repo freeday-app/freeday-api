@@ -33,7 +33,7 @@ const Auth = {
             // si user trouvé et password correspond
             if (user && verify) {
                 // génère nouveau token et insère en base
-                const uid = await Tools.generateToken();
+                const uid = Tools.generateToken();
                 const result = await Models.Token.findOneAndUpdate({
                     userId: user.id
                 }, {
@@ -276,7 +276,7 @@ const Auth = {
     async createInitialization() {
         await Auth.deleteInitialization();
         Log.info('Creating welcome initialization token');
-        const uid = await Tools.generateToken();
+        const uid = Tools.generateToken();
         const token = new Models.Token({
             token: uid,
             userId: null,

@@ -48,7 +48,7 @@ const SlackAuth = {
     async url(req, res) {
         try {
             // creates oauth state code
-            const state = await Tools.generateToken();
+            const state = Tools.generateToken();
             const redirectUrl = SDK.getRedirectUrl();
             // saves state token in database
             await SlackAuth.upsert({ state });

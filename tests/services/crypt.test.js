@@ -5,7 +5,7 @@ const Crypt = require('../../src/services/crypt.js');
 
 describe('[Services] Crypt', () => {
     it('Should hash and verify password correctly', async () => {
-        const password = Tools.generateRandomPassword(10);
+        const password = Tools.generateRandomString(10);
         const hash = await Crypt.hashPassword(password);
         const verified = await Crypt.verifyPassword(password, hash);
         expect(hash).to.not.equal(password);
