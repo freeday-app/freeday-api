@@ -28,8 +28,8 @@ const App = Express();
 // needed to forward ip through proxy
 App.enable('trust proxy');
 
-// protection helmet
-App.use(Helmet());
+// helmet protection on api
+App.use('/api/*', Helmet());
 
 // démarrage app asynchrone
 (async () => {
