@@ -6,7 +6,7 @@
 	"scripts": {
 		"prod": "node src/app.js",
 		"dev": "cross-env PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
-		"dev-test": "cross-env ENVIRONMENT=test TEST_USERNAME=testuser TEST_PASSWORD=testpassword PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
+		"dev-test": "cross-env ENVIRONMENT=test PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
         "test": "cross-env ENVIRONMENT=test SLACK_ENABLED=false nyc mocha --timeout 10000 --exit",
 		"lint": "eslint .",
 		"lint-fix": "eslint . --fix"
