@@ -51,7 +51,7 @@ const dayoffSchema = Mongoose.Schema({
     versionKey: false,
     toJSON: {
         virtuals: true,
-        transform(doc, ret) {
+        transform(_doc, ret) {
             ret.id = ret._id;
             delete ret._id;
         }

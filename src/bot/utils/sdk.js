@@ -84,7 +84,6 @@ const SDK = {
     },
 
     // initializes web client
-    // initWebClient(auth) {
     initWebClient(accessToken) {
         // SDK.webClient = auth && auth.accessToken ? new WebClient(auth.accessToken) : null;
         SDK.webClient = accessToken ? new WebClient(accessToken) : null;

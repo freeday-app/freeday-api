@@ -26,7 +26,7 @@ const Create = {
             type,
             slackUser: await SlackDataController.getUserData(payload.user)
         };
-        const dayoff = await DayoffService.process(data, workDays);
+        const dayoff = DayoffService.process(data, workDays);
         // récupère l'attachment pour le dayoff
         const attachment = Attachments.dayoff({ dayoff }, payload.getText);
         // envoie le message, l'attachment et les boutons de confirmation/annulation

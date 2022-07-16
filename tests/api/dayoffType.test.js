@@ -142,8 +142,7 @@ describe('[API] Dayoff types', () => {
         });
 
         it('Should create a dayoff type', async () => {
-            for (let i = 0; i < Data.dayoffTypes.length; i += 1) {
-                const data = Data.dayoffTypes[i];
+            for (const data of Data.dayoffTypes) {
                 const body = await createDayoffType(data);
                 assertDayoffType(body, {
                     emoji: null,

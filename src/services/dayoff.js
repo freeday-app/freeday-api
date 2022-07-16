@@ -307,13 +307,13 @@ const DayoffService = {
             _id: typeId,
             enabled: true
         }).exec();
-        if (dayoffType && dayoffType.enabled) {
-            return dayoffType;
-        } if (dayoffType && !dayoffType.enabled) {
+        if (dayoffType) {
+            if (dayoffType.enabled) {
+                return dayoffType;
+            }
             throw new DisabledDayoffTypeError(`Dayoff type ${typeId} is disabled`);
-        } else {
-            throw new ValidationError(`Wrong dayoff type '${typeId}'`);
         }
+        throw new ValidationError(`Wrong dayoff type '${typeId}'`);
     }
 
 };

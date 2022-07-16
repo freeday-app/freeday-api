@@ -38,7 +38,7 @@ const tokenSchema = Mongoose.Schema({
     collection: 'tokens',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             delete ret.initialization;
             delete ret._id;
         }

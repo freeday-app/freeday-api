@@ -396,7 +396,7 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
             expect(body.daysoff).to.have.lengthOf.above(0);
             expect(body.daysoff).to.have.lengthOf(daysoff.length);
             const sortedDaysoff = sortDaysoff(daysoff);
-            sortedDaysoff.forEach((d, idx) => {
+            sortedDaysoff.forEach((_d, idx) => {
                 assertDayoff(body.daysoff[idx], {
                     ...sortedDaysoff[idx],
                     type: dayoffTypesById[
@@ -434,7 +434,7 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                 }
                 expect(body.daysoff).to.have.lengthOf.above(0);
                 expect(body.daysoff).to.have.lengthOf(filteredDaysoff.length);
-                filteredDaysoff.forEach((d, idx) => {
+                filteredDaysoff.forEach((_d, idx) => {
                     assertDayoff(body.daysoff[idx], {
                         ...filteredDaysoff[idx],
                         type: dayoffTypesById[
@@ -521,8 +521,9 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                 const paginatedDaysoff = page !== 'all'
                     ? sortDaysoff(daysoff).slice((page - 1) * limit, page * limit)
                     : sortDaysoff(daysoff);
+                const limitParam = limit ? `&limit=${limit}` : '';
                 const response = await API.request()
-                    .get(`/api/daysoff?page=${page}${limit ? `&limit=${limit}` : ''}`);
+                    .get(`/api/daysoff?page=${page}${limitParam}`);
                 expect(response).to.have.status(200);
                 expect(response).to.be.json;
                 const { body } = response;
@@ -545,7 +546,7 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                     expect(body.daysoff).to.have.lengthOf(limit);
                 }
                 expect(body.daysoff.length).to.equal(paginatedDaysoff.length);
-                paginatedDaysoff.forEach((d, idx) => {
+                paginatedDaysoff.forEach((_d, idx) => {
                     assertDayoff(body.daysoff[idx], {
                         ...paginatedDaysoff[idx],
                         type: dayoffTypesById[

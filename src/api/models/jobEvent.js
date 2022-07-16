@@ -18,7 +18,7 @@ const jobEventSchema = Mongoose.Schema({
     collection: 'jobevents',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             delete ret._id;
         }
     }

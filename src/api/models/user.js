@@ -30,7 +30,7 @@ const userSchema = Mongoose.Schema({
     collection: 'users',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             ret.id = ret._id;
             delete ret._id;
             delete ret.password;

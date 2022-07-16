@@ -103,7 +103,7 @@ const handleMongooseError = (err) => {
 };
 
 // injecte fonction utilitire dans app express pour renvoyer des errreurs
-const middleware = (req, res, next) => {
+const middleware = (_req, res, next) => {
     res.error = (e) => {
         const err = handleMongooseError(e);
         let { message } = err;

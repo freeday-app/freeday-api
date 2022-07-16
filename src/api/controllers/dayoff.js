@@ -33,14 +33,13 @@ const Dayoff = {
     async listProxy(query) {
         const find = Dayoff.getListFindObject(query);
         const sort = Dayoff.getListSortObject(query);
-        const result = await Models.Dayoff.paginateToResult(
+        return Models.Dayoff.paginateToResult(
             'daysoff',
             query.page,
             query.limit,
             find,
             sort
         );
-        return result;
     },
 
     getListFindObject(filter) {
@@ -253,7 +252,7 @@ const Dayoff = {
         // données de configuration necessaires à la mise à jour d'absence
         const { slackReferrer, workDays } = await ConfigurationController.getProxy();
         // process données absence
-        const dayoffData = await DayoffService.process({
+        const dayoffData = DayoffService.process({
             ...resultGet._doc, // eslint-disable-line no-underscore-dangle
             ...data
         }, workDays, false);

@@ -20,14 +20,14 @@ module.exports = {
         PrivateRoutes(App, Controllers.auth.middleware);
 
         // ping
-        App.get('/api/ping', (req, res) => {
+        App.get('/api/ping', (_req, res) => {
             res.send({
                 version: Package.version
             });
         });
 
         // gère calls à routes inconnues
-        App.all('/api/*', (req, res) => {
+        App.all('/api/*', (_req, res) => {
             res.error(new NotFoundError());
         });
 
@@ -37,13 +37,13 @@ module.exports = {
             App.use(Express.static(
                 Path.join(__dirname, '../../../web')
             ));
-            App.all('*', (req, res) => {
+            App.all('*', (_req, res) => {
                 res.sendFile('index.html', {
                     root: Path.join(__dirname, '../../../web')
                 });
             });
         } else { // any other request falls in 404 if in dev mode
-            App.all('*', (req, res) => {
+            App.all('*', (_req, res) => {
                 res.error(new NotFoundError());
             });
         }

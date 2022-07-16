@@ -15,7 +15,7 @@ const Configuration = {
         workDays: [1, 2, 3, 4, 5]
     },
 
-    async get(req, res) {
+    async get(_req, res) {
         try {
             const conf = await Configuration.getProxy();
             res.status(200).json(conf);
@@ -37,7 +37,7 @@ const Configuration = {
     },
 
     // public configuration data
-    async getPublic(req, res) {
+    async getPublic(_req, res) {
         try {
             const {
                 brandingName,

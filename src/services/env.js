@@ -20,7 +20,7 @@ const parseEnvVar = (key, value, type) => {
 };
 
 const parseEnv = (data, schema) => {
-    const env = {};
+    const envData = {};
     const errors = [];
     const keys = Object.keys(schema);
     keys.forEach((key) => {
@@ -35,7 +35,7 @@ const parseEnv = (data, schema) => {
                 if (filter && !filter.includes(value)) {
                     throw new Error(`invalid ${key} value (expected one of: ${filter.join(', ')})`);
                 }
-                env[key] = value;
+                envData[key] = value;
             } else if (required) {
                 throw new Error(`missing or empty ${key} environment variable`);
             }
@@ -46,7 +46,7 @@ const parseEnv = (data, schema) => {
     if (errors.length) {
         throw new Error(`Invalid environment: ${errors.join(' ; ')}`);
     }
-    return env;
+    return envData;
 };
 
 const env = parseEnv(process.env, envSchema);

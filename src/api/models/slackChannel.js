@@ -33,7 +33,7 @@ const slackChannelSchema = Mongoose.Schema({
     collection: 'slackchannels',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             delete ret._id;
         }
     },

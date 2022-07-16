@@ -7,8 +7,7 @@ const Crypt = {
     hashRounds: 10,
 
     async hashPassword(password) {
-        const hash = await Bcrypt.hash(password, Crypt.hashRounds);
-        return hash;
+        return Bcrypt.hash(password, Crypt.hashRounds);
     },
 
     async verifyPassword(password, hash) {

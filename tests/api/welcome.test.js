@@ -36,8 +36,7 @@ const getWelcomeSecret = async () => {
         return null;
     }
     const json = result.toJSON();
-    const secret = Buffer.from(json.token).toString('base64').replace('=', '');
-    return secret;
+    return Buffer.from(json.token).toString('base64').replace('=', '');
 };
 
 describe('[API] Welcome', () => {

@@ -110,15 +110,17 @@ const API = {
 
     // mock le module slack
     mockSlack() {
-        // mock synchronisation données slacks dans controlleur slack
-        SlackDataController.sync = () => {};
-        // mock envois de notification slacks
+        SlackDataController.sync = () => {
+            // mock synchronisation données slacks dans controlleur slack
+        };
         [
             'send', 'confirmCreate', 'confirmEdit', 'confirmDelete',
             'confirm', 'referrerCreate', 'referrerEdit', 'referrerDelete',
             'referrer', 'statusChange', 'noDaysError'
         ].forEach((functionName) => {
-            SlackNotify[functionName] = () => {};
+            SlackNotify[functionName] = () => {
+                // mock envois de notification slacks
+            };
         });
     }
 

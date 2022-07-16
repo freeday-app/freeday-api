@@ -102,9 +102,11 @@ const Attachments = {
         if (startDate === endDate) {
             if (dayoff.startPeriod && dayoff.endPeriod && dayoff.startPeriod === dayoff.endPeriod) {
                 return getText('dayoff.phrase_oneday', `${startText} ${getText(`common.${dayoff.startPeriod}`).toLowerCase()}`);
-            } if (!dayoff.startPeriod && dayoff.endPeriod === 'am') {
+            }
+            if (!dayoff.startPeriod && dayoff.endPeriod === 'am') {
                 return getText('dayoff.phrase_oneday', `${startText} ${getText('common.am').toLowerCase()}`);
-            } if (!dayoff.endPeriod && dayoff.startPeriod === 'pm') {
+            }
+            if (!dayoff.endPeriod && dayoff.startPeriod === 'pm') {
                 return getText('dayoff.phrase_oneday', `${startText} ${getText('common.pm').toLowerCase()}`);
             }
             return getText('dayoff.phrase_oneday', startText);

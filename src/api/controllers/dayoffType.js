@@ -26,14 +26,13 @@ const DayoffType = {
 
     async listProxy(filter) {
         const find = DayoffType.getFindObject(filter);
-        const list = await Models.DayoffType.paginateToResult(
+        return Models.DayoffType.paginateToResult(
             'dayoffTypes',
             filter.page,
             filter.limit,
             find,
             { name: 'asc' }
         );
-        return list;
     },
 
     getFindObject(filter) {

@@ -18,7 +18,7 @@ const slackAuthSchema = Mongoose.Schema({
     collection: 'slackauth',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             delete ret._id;
         }
     }

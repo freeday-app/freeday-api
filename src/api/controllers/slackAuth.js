@@ -45,7 +45,7 @@ const SlackAuth = {
     },
 
     // gets slack oauth url
-    async url(req, res) {
+    async url(_req, res) {
         try {
             // creates oauth state code
             const state = Tools.generateToken();

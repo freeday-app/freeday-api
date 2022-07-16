@@ -90,21 +90,16 @@ const Handlers = {
     // gère actions boutons liste absence
     async dayoffAction(payload) {
         const action = Handlers.getPayloadAction(payload);
-        if (action) {
-            if (action.startsWith('edit.')) { // demande formulaire édition absence
-                const dayoffId = action.replace('edit.', '');
-                // envoie modale modification absence
-                await Views.modal.send(payload, dayoffId);
-                return null;
-            } if (action.startsWith('cancel.')) { // annulation absence
-                const dayoffId = action.replace('cancel.', '');
-                // annule absence
-                await Handlers.cancelDayoff(payload, dayoffId);
-                return null;
-            }
+        if (action && action.startsWith('edit.')) { // demande formulaire édition absence
+            const dayoffId = action.replace('edit.', '');
+            // envoie modale modification absence
+            await Views.modal.send(payload, dayoffId);
+        } if (action && action.startsWith('cancel.')) { // annulation absence
+            const dayoffId = action.replace('cancel.', '');
+            // annule absence
+            await Handlers.cancelDayoff(payload, dayoffId);
         }
         Log.error(`Unhandled dayoff action ${action}`);
-        return null;
     },
 
     // gère actions boutons liste absence
@@ -173,14 +168,18 @@ const Handlers = {
             // si erreurs de validation de l'absence
             if (err instanceof EndBeforeStartError) {
                 return Views.modal.error(payload, 'end_date', 'errors.end_before_start');
-            } if (err instanceof NoWorkDaysError) {
+            }
+            if (err instanceof NoWorkDaysError) {
                 return Views.modal.error(payload, 'start_date', 'errors.no_work_days');
-            } if (err instanceof ConflictError) {
+            }
+            if (err instanceof ConflictError) {
                 return Views.modal.error(payload, 'start_date', 'errors.conflict');
-            } if (err instanceof NotifyReferrerError) {
+            }
+            if (err instanceof NotifyReferrerError) {
                 await Notify.warning(payload.user.id, 'warnings.notify_referrer');
                 return null;
-            } if (err instanceof NotifyUserError) {
+            }
+            if (err instanceof NotifyUserError) {
                 await Notify.warning(payload.user.id, 'warnings.notify_user');
                 return null;
             }

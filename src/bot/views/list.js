@@ -85,14 +85,13 @@ const List = {
         const { user: { id: slackUserId } } = payload;
         const isPast = listPage < 1;
         const date = DayJS().subtract((isPast ? 1 : 0), 'days').format('YYYY-MM-DD');
-        const list = await DayoffController.listProxy({
+        return DayoffController.listProxy({
             [isPast ? 'end' : 'start']: date,
             slackUser: slackUserId,
             limit: 3,
             page: Math.abs(listPage),
             order: isPast ? 'desc' : 'asc'
         });
-        return list;
     },
 
     // renvoie boutons pour liste absences

@@ -101,7 +101,7 @@ const Tools = {
     },
 
     isEmail(string) {
-        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(String(string).toLowerCase());
     },
 
@@ -183,17 +183,17 @@ const Tools = {
     // Job tools
 
     isCronDayOfMonth(string) {
-        const regex = /(^\*$)|(^[1-9]$)|(^[1-2][0-9]$)|(^3[0-1]$)/g;
+        const regex = /(^\*$)|(^[1-9]$)|(^[1-2]\d$)|(^3[0-1]$)/g;
         return regex.test(string);
     },
 
     isCronHour(string) {
-        const regex = /(^\*$)|(^[0-9]$)|(^1[0-9]$)|(^2[0-3]$)/g;
+        const regex = /(^\*$)|(^\d$)|(^1\d$)|(^2[0-3]$)/g;
         return regex.test(string);
     },
 
     isCronMinute(string) {
-        const regex = /(^\*$)|(^[0-9]$)|(^[1-5][0-9]$)/g;
+        const regex = /(^\*$)|(^\d$)|(^[1-5]\d$)/g;
         return regex.test(string);
     },
 

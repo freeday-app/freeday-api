@@ -22,7 +22,7 @@ const configurationSchema = Mongoose.Schema({
     collection: 'configuration',
     versionKey: false,
     toJSON: {
-        transform(doc, ret) {
+        transform(_doc, ret) {
             delete ret._id;
         }
     }
