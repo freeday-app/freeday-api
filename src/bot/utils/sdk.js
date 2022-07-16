@@ -4,6 +4,7 @@ const { App: SlackApp, ExpressReceiver } = require('@slack/bolt');
 const Log = require('../../services/log.js');
 const Models = require('../../api/models/index.js');
 const Tools = require('../../services/tools.js');
+const { env } = require('../../services/env.js');
 const {
     InternError,
     SlackOAuthError
@@ -31,13 +32,13 @@ const SDK = {
         try {
             // initializes web clients
             // SDK.initWebClient(auth);
-            SDK.initWebClient(process.env.SLACK_ACCESS_TOKEN);
+            SDK.initWebClient(env.SLACK_ACCESS_TOKEN);
             // initializes Slack application
             SDK.app = new SlackApp({
                 authorize: () => ({ botToken: null }),
                 ignoreSelf: false,
                 receiver: new ExpressReceiver({
-                    signingSecret: process.env.SLACK_SIGNING_SECRET,
+                    signingSecret: env.SLACK_SIGNING_SECRET,
                     endpoints: '/'
                 })
             });
@@ -107,8 +108,8 @@ const SDK = {
     async checkOAuthCode(code) {
         try {
             const result = await (new WebClient()).oauth.v2.access({
-                client_id: process.env.SLACK_CLIENT_ID,
-                client_secret: process.env.SLACK_CLIENT_SECRET,
+                client_id: env.SLACK_CLIENT_ID,
+                client_secret: env.SLACK_CLIENT_SECRET,
                 redirect_uri: SDK.redirectUrl(),
                 code
             });
@@ -130,7 +131,7 @@ const SDK = {
 
     // generates redirect uri
     getRedirectUrl() {
-        return Tools.buildUrl(process.env.PUBLIC_URL, 'register');
+        return Tools.buildUrl(env.PUBLIC_URL, 'register');
     }
 };
 

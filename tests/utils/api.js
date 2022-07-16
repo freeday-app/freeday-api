@@ -5,46 +5,43 @@ const ChaiHttp = require('chai-http');
 
 Chai.use(ChaiHttp);
 
+const App = require('../../src/app.js');
+const Models = require('../../src/api/models/index.js');
+const Log = require('../../src/services/log.js');
+const Crypt = require('../../src/services/crypt.js');
 const Tools = require('../../src/services/tools.js');
 const SlackNotify = require('../../src/bot/utils/notify.js');
 const SlackDataController = require('../../src/api/controllers/slackData.js');
 const Data = require('../api/data/global.data.js');
 
+before((done) => {
+    App.on('ready', () => {
+        done();
+    });
+});
+
 const API = {
 
-    app: null,
     user: null,
     password: null,
     token: null,
     initDone: false,
 
-    // initialise api pour tests
+    // initializes api for tests
     async init() {
         if (API.initDone) {
             return;
         }
-        // données pour user de test
-        const username = `test${Tools.generateRandomPassword(6)}`;
-        const password = Tools.generateRandomPassword(10);
-        // variable environnement mode test
-        process.env.MODE = 'test';
-        process.env.SLACK_ENABLED = 'false';
-        // variable environnement pour création user de test
-        process.env.TEST_USER = `${username}:${password}`;
-        // récupère instance app
-        API.app = require('../../src/app.js'); // eslint-disable-line global-require
-        // attend que l'app soit initialisée
-        await new Promise((resolve) => {
-            if (API.app.isReady) {
-                resolve();
-            } else {
-                API.app.on('ready', resolve);
-            }
-        });
-        // set données user de test
+        // set api log level to error
+        Log.info('Switching console level to error');
+        Log.toggleTransport('file', true, 'error');
+        Log.toggleTransport('console', true, 'error');
+        // creates test user
+        const { username, password } = await API.createUser();
+        // set user data locally
         await API.setUserData(username, password);
         await API.initSlackData();
-        // mocks
+        // slack mock
         API.mockSlack();
         //
         API.initDone = true;
@@ -53,7 +50,7 @@ const API = {
     // renvoie object chai http pour requête sur api
     request: (auth = true) => {
         const getReq = (method, ...args) => {
-            let chaiReq = Chai.request(API.app)[method](...args);
+            let chaiReq = Chai.request(App)[method](...args);
             if (auth === true) {
                 chaiReq = chaiReq.set('Authorization', API.token);
             } else if (auth) {
@@ -67,6 +64,23 @@ const API = {
             put: (...args) => getReq('put', ...args),
             delete: (...args) => getReq('delete', ...args),
             patch: (...args) => getReq('patch', ...args)
+        };
+    },
+
+    // creates test user
+    async createUser() {
+        // creates test user
+        const username = `test${Tools.generateRandomPassword(6)}`;
+        const password = Tools.generateRandomPassword(10);
+        const hash = await Crypt.hashPassword(password);
+        await new Models.User({
+            username,
+            password: hash,
+            language: 'en'
+        }).save();
+        return {
+            username,
+            password
         };
     },
 

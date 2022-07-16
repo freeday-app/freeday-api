@@ -1,7 +1,7 @@
 const Log = require('./log.js');
 const Recap = require('../bot/views/recap.js');
 const Language = require('./language.js');
-const Modes = require('./modes.js');
+const { env } = require('./env.js');
 const Tools = require('./tools.js');
 const SlackDataController = require('../api/controllers/slackData.js');
 const JobController = require('../api/controllers/job.js');
@@ -42,7 +42,7 @@ const Jobs = {
     // Jobs to run
     // Exceptions are handled by the job controller
     jobMonthlyRecap: async () => {
-        if (Modes.botIsEnabled()) {
+        if (env.SLACK_ENABLED) {
             const { slackUsers } = await SlackDataController.listUsersProxy({
                 page: 'all',
                 deleted: false

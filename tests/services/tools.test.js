@@ -280,10 +280,11 @@ describe('[Services] Tools', () => {
                 'crypt.js',
                 'dayoff.js',
                 'dialog.js',
+                'env.js',
+                'env.schema.json',
                 'jobs.js',
                 'language.js',
                 'log.js',
-                'modes.js',
                 'paginator.js',
                 'tools.js',
                 'validator.js'

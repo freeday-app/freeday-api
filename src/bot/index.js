@@ -7,6 +7,7 @@ const Handlers = require('./utils/handlers.js');
 // const SlackAuthController = require('../api/controllers/slackAuth.js');
 const LanguageService = require('../services/language.js');
 const DialogService = require('../services/dialog.js');
+const { env } = require('../services/env.js');
 
 const Bot = {
 
@@ -19,7 +20,7 @@ const Bot = {
             // await SDK.init(App, auth);
             await SDK.init(App);
             // initialise dialogflow
-            if (process.env.DIALOGFLOW_ENABLED === 'true') {
+            if (env.DIALOGFLOW_ENABLED === 'true') {
                 DialogService.init();
             }
             // bind handlers
@@ -66,7 +67,7 @@ const Bot = {
             const response = await [
                 Handlers.botFilterMiddleware,
                 LanguageService.slackMiddleware,
-                process.env.DIALOGFLOW_ENABLED === 'true' ? DialogService.slackMiddleware : null,
+                env.DIALOGFLOW_ENABLED === 'true' ? DialogService.slackMiddleware : null,
                 handler
             ].filter((m) => !!m).reduce(Bot.applyMiddleware, processedEvent);
 

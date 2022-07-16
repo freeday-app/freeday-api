@@ -176,9 +176,9 @@ const Validator = {
                     ? Tools.parseBooleanString(value)
                     : !!value;
             case 'Page':
-                return value === 'all' ? value : parseInt(value, 10);
+                return value === 'all' ? value : parseInt(value);
             case 'Number':
-                return parseInt(value, 10);
+                return parseInt(value);
             case 'Email':
                 return String(value).toLowerCase();
             case 'MongoId':
@@ -223,12 +223,12 @@ const Validator = {
         if (!Number.isNaN(string)) {
             return {
                 operator: false,
-                value: parseInt(string, 10)
+                value: parseInt(string)
             };
         }
         return {
             operator: string.charAt(0),
-            value: parseInt(string.substring(1), 10)
+            value: parseInt(string.substring(1))
         };
     },
 

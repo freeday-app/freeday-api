@@ -4,6 +4,7 @@ const Tools = require('../../services/tools.js');
 const Models = require('../models/index.js');
 const SDK = require('../../bot/utils/sdk.js');
 const StatsLog = require('../../services/statsLog.js');
+const { env } = require('../../services/env.js');
 const {
     SlackOAuthError
 } = require('../../services/errors.js');
@@ -53,7 +54,7 @@ const SlackAuth = {
             await SlackAuth.upsert({ state });
             // url parameters
             const params = [
-                `client_id=${process.env.SLACK_CLIENT_ID}`,
+                `client_id=${env.SLACK_CLIENT_ID}`,
                 `scope=${SDK.scopes.join(encodeURI(' '))}`,
                 `redirect_uri=${redirectUrl}`,
                 `state=${state}`

@@ -3,7 +3,7 @@ const Schemas = require('./schemas/index.js');
 const Models = require('../models/index.js');
 const Notify = require('../../bot/utils/notify.js');
 const DayoffService = require('../../services/dayoff.js');
-const Modes = require('../../services/modes.js');
+const { env } = require('../../services/env.js');
 const Log = require('../../services/log.js');
 const StatsLog = require('../../services/statsLog.js');
 const {
@@ -188,7 +188,7 @@ const Dayoff = {
         await newDayoff.save();
         const dayoff = await Models.Dayoff.findById(newDayoff._id).exec();
         if (dayoff) {
-            if (Modes.botIsEnabled()) {
+            if (env.SLACK_ENABLED) {
                 const errorQueue = [];
                 try {
                     // notifie l'utilisateur que son absence a été créée
@@ -281,7 +281,7 @@ const Dayoff = {
             new: true,
             runValidators: true
         }).exec();
-        if (Modes.botIsEnabled()) {
+        if (env.SLACK_ENABLED) {
             const errorQueue = [];
             try {
                 // notifie l'utilisateur que son absence a été modifiée
@@ -308,13 +308,13 @@ const Dayoff = {
 
     async delete(req, res) {
         try {
-            if (Modes.current() === 'test') {
+            if (env.ENVIRONMENT === 'test') {
                 await Validator.checkSchema(req, Schemas.dayoff.get);
                 const dayoff = await Models.Dayoff.findOneAndDelete({
                     _id: req.params.id
                 }).exec();
                 if (dayoff !== null) {
-                    if (Modes.botIsEnabled()) {
+                    if (env.SLACK_ENABLED) {
                         // notifie l'utilisateur que son absence a été modifiée
                         await Notify.confirmDelete(dayoff.slackUser.slackId, dayoff);
                         // avertit le référent Slack qu'une absence a été supprimée
@@ -407,7 +407,7 @@ const Dayoff = {
         }).exec();
         if (dayoff) {
             // si bot slack actif
-            if (Modes.botIsEnabled()) {
+            if (env.SLACK_ENABLED) {
                 const errorQueue = [];
                 try {
                     // notifie utilisateur de l'action sur son absence

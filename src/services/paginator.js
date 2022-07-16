@@ -29,11 +29,11 @@ const Paginator = {
             // gets paging values
             let page = 1;
             if (qPage && !Number.isNaN(qPage)) {
-                page = parseInt(qPage, 10);
+                page = parseInt(qPage);
             }
             let limit = Paginator.defaultLimit;
             if (qLimit && !Number.isNaN(qLimit)) {
-                limit = parseInt(qLimit, 10);
+                limit = parseInt(qLimit);
             }
             const skip = (page - 1) * limit;
             // counts total docs in query

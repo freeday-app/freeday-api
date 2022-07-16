@@ -130,7 +130,7 @@ const DayoffService = {
         const startDay = DayJS(startDate);
         let currentDay = startDay;
         const endDay = isEnd ? DayJS(until) : null;
-        const nbDays = isEnd ? null : parseInt(until, 10);
+        const nbDays = isEnd ? null : parseInt(until);
         // récupères années pour jours fériés
         let thisYear = startDay.year();
         const futureYear = isEnd ? (

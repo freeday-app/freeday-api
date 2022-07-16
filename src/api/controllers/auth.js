@@ -7,7 +7,7 @@ const Tools = require('../../services/tools.js');
 const StatsLog = require('../../services/statsLog.js');
 const Crypt = require('../../services/crypt.js');
 const Log = require('../../services/log.js');
-const Modes = require('../../services/modes.js');
+const { env } = require('../../services/env.js');
 const {
     AuthenticationError,
     WelcomeSecretError,
@@ -140,7 +140,7 @@ const Auth = {
     // self user will be deleted and all tokens deleted as well
     async initiateTest(req, res) {
         try {
-            if (Modes.current() === 'test') {
+            if (env.ENVIRONMENT === 'test') {
                 // checks if self user is the only one in database
                 const users = await Models.User.find({
                     _id: {
@@ -313,7 +313,7 @@ const Auth = {
 
     // builds welcome url
     buildWelcomeUrl(initToken) {
-        const apiUrl = process.env.PUBLIC_URL;
+        const apiUrl = env.PUBLIC_URL;
         // encodes token in base64
         const base64Token = Crypt.encodeBase64(initToken, false);
         // builds url

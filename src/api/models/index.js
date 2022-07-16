@@ -12,6 +12,8 @@ const StatsLogModel = require('./statsLog.js');
 const TokenModel = require('./token.js');
 const UserModel = require('./user.js');
 
+const { env } = require('../../services/env.js');
+const Crypt = require('../../services/crypt.js');
 const Paginator = require('../../services/paginator.js');
 const Cleanup = require('../../services/cleanup.js');
 const Log = require('../../services/log.js');
@@ -35,12 +37,11 @@ const Models = {
     },
 
     // initialise la base de données
-    async init(mode = null) {
+    async init() {
         try {
             Log.info('Starting MongoDB initialization');
-            Models.mode = mode;
             // connects to database and load models
-            await Models.connectAndLoadModels(mode);
+            await Models.connectAndLoadModels();
             // à la fermeture de l'app
             Cleanup.add(async () => {
                 // ferme toutes les connections mongodb
@@ -53,11 +54,11 @@ const Models = {
     },
 
     // connects to database and loads models
-    async connectAndLoadModels(mode = null) {
+    async connectAndLoadModels() {
         Log.info('Initializing MongoDB connection');
-        const url = mode === 'test'
-            ? process.env.MONGO_TEST_URL
-            : process.env.MONGO_URL;
+        const url = env.ENVIRONMENT === 'test'
+            ? env.MONGO_TEST_URL
+            : env.MONGO_URL;
         // connects to mongo database
         try {
             await Mongoose.connect(url, {
@@ -75,8 +76,9 @@ const Models = {
         }
         Log.info('MongoDB connection initialized');
         // clears test database if test mode
-        if (mode === 'test') {
+        if (env.ENVIRONMENT === 'test') {
             await Models.clearTestDatabase();
+            await Models.createTestUser();
         }
     },
 
@@ -96,10 +98,22 @@ const Models = {
         });
     },
 
+    // creates a test user when in test environment
+    async createTestUser() {
+        if (env.ENVIRONMENT === 'test') {
+            const hash = await Crypt.hashPassword(env.TEST_PASSWORD);
+            await new Models.User({
+                username: env.TEST_USERNAME,
+                password: hash,
+                language: 'en'
+            }).save();
+        }
+    },
+
     // vide la base de données de test
     async clearTestDatabase() {
         // contrôle mode de test
-        if (Models.mode === 'test') {
+        if (env.ENVIRONMENT === 'test') {
             // efface collections
             await Models.User.deleteMany();
             await Models.Dayoff.deleteMany();

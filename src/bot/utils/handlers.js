@@ -113,7 +113,7 @@ const Handlers = {
         if (action) {
             // affichage pages absences
             if (action.startsWith('dayoff_list_page_')) {
-                const listPage = parseInt(action.replace('dayoff_list_page_', ''), 10);
+                const listPage = parseInt(action.replace('dayoff_list_page_', ''));
                 return Views.list.send(payload, listPage);
             }
         }

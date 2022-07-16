@@ -22,6 +22,7 @@
         "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
         "no-underscore-dangle": ["error", {
             "allow": ["_id"]
-        }]
+        }],
+        "radix": ["error", "as-needed"]
     }
 }

@@ -5,6 +5,7 @@ const Controllers = require('../controllers/index.js');
 const PublicRoutes = require('./public.js');
 const PrivateRoutes = require('./private.js');
 const Log = require('../../services/log.js');
+const { env } = require('../../services/env.js');
 const { NotFoundError } = require('../../services/errors.js');
 
 const Package = require('../../../package.json');
@@ -31,7 +32,7 @@ module.exports = {
         });
 
         // serve client build in production
-        if (process.env.ENVIRONMENT === 'prod') {
+        if (env.ENVIRONMENT === 'prod') {
             Log.info('Serving production web client build');
             App.use(Express.static(
                 Path.join(__dirname, '../../../web')

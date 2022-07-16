@@ -1,6 +1,7 @@
 const dialogflow = require('@google-cloud/dialogflow');
 const DayJS = require('dayjs');
 
+const { env } = require('./env.js');
 const Log = require('./log.js');
 
 const Dialog = {
@@ -21,17 +22,17 @@ const Dialog = {
     // récupère la configuration et initialise le client DialogFlow et l'endpoint
     init() {
         Dialog.path = `projects/${
-            process.env.DIALOGFLOW_PROJECT
+            env.DIALOGFLOW_PROJECT
         }/locations/${
-            process.env.DIALOGFLOW_LOCATION
+            env.DIALOGFLOW_LOCATION
         }/agent/environments/${
-            process.env.DIALOGFLOW_ENVIRONMENT
+            env.DIALOGFLOW_ENVIRONMENT
         }/users/${
-            process.env.DIALOGFLOW_USER
+            env.DIALOGFLOW_USER
         }/sessions/freeday`;
         Dialog.client = new dialogflow.SessionsClient({
-            apiEndpoint: process.env.DIALOGFLOW_ENDPOINT,
-            keyFilename: process.env.DIALOGFLOW_KEYFILE
+            apiEndpoint: env.DIALOGFLOW_ENDPOINT,
+            keyFilename: env.DIALOGFLOW_KEYFILE
         });
         Log.info('Dialogflow NLU initialized');
     },
@@ -44,7 +45,7 @@ const Dialog = {
             queryInput: {
                 text: {
                     text: str,
-                    languageCode: process.env.DIALOGFLOW_LANGUAGE
+                    languageCode: env.DIALOGFLOW_LANGUAGE
                 }
             }
         };

@@ -2,6 +2,8 @@ const Path = require('path');
 const Fs = require('fs');
 const Winston = require('winston');
 
+const { env } = require('./env.js');
+
 const { format } = Winston;
 
 // log header formatter
@@ -28,7 +30,7 @@ const transports = [
 ];
 
 // controls log directory
-const logDir = process.env.LOG_DIR;
+const logDir = env.LOG_DIR;
 let fileTransportError = null;
 if (!logDir) {
     fileTransportError = 'no log directory provided';

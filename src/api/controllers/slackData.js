@@ -1,7 +1,7 @@
 const Validator = require('../../services/validator.js');
 const Schemas = require('./schemas/index.js');
 const Log = require('../../services/log.js');
-const Modes = require('../../services/modes.js');
+const { env } = require('../../services/env.js');
 const Tools = require('../../services/tools.js');
 const Models = require('../models/index.js');
 const SDK = require('../../bot/utils/sdk.js');
@@ -42,7 +42,7 @@ const SlackData = {
         try {
             await Validator.checkSchema(req, Schemas.slackData.listUsers);
             // synchronise users slack avec api slack
-            if (Modes.botIsEnabled()) {
+            if (env.SLACK_ENABLED) {
                 await SlackData.syncUsers();
             }
             // liste users slack
@@ -96,7 +96,7 @@ const SlackData = {
     // créée ou modifie user slack en base (mode test uniquement)
     async upsertUser(req, res) {
         try {
-            if (Modes.current() === 'test') {
+            if (env.ENVIRONMENT === 'test') {
                 await Validator.checkSchema(req, Schemas.slackData.createUser);
                 const slackUser = await SlackData.upsertUserProxy(req.body);
                 res.status(200).json(slackUser.toJSON());
@@ -281,7 +281,7 @@ const SlackData = {
     // depuis l'API si la synchronisation a eu lieu
     // sinon depuis la BD
     async getUserData(userId, force = false) {
-        if (Modes.botIsEnabled()) {
+        if (env.SLACK_ENABLED) {
             const userData = await SlackData.syncUser(userId, force);
             if (userData) {
                 return userData;
@@ -298,7 +298,7 @@ const SlackData = {
         try {
             await Validator.checkSchema(req, Schemas.slackData.listChannels);
             // synchronise channels slack avec api slack
-            if (Modes.botIsEnabled()) {
+            if (env.SLACK_ENABLED) {
                 await SlackData.syncChannels();
             }
             const onlyMember = req.query.onlyMember === 'true';
@@ -357,7 +357,7 @@ const SlackData = {
     // créée ou modifie un channel slack en base (mode test uniquement)
     async upsertChannel(req, res) {
         try {
-            if (Modes.current() === 'test') {
+            if (env.ENVIRONMENT === 'test') {
                 await Validator.checkSchema(req, Schemas.slackData.createChannel);
                 const slackChannel = {
                     isChannel: true,

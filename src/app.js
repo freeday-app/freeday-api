@@ -1,9 +1,4 @@
-// timezone
-process.env.TZ = 'GMT';
-
-// initialise configuration dotenv
 require('dotenv').config();
-// TODO configuration integrity should be checked somehow
 
 const DayJS = require('dayjs');
 const CustomParseFormat = require('dayjs/plugin/customParseFormat.js');
@@ -17,8 +12,8 @@ const Bot = require('./bot/index.js');
 const Models = require('./api/models/index.js');
 const Routes = require('./api/routes/index.js');
 const Errors = require('./services/errors.js');
+const { env } = require('./services/env.js');
 const Log = require('./services/log.js');
-const Modes = require('./services/modes.js');
 const Jobs = require('./services/jobs.js');
 const Auth = require('./api/controllers/auth.js');
 
@@ -39,15 +34,14 @@ App.use(Helmet());
 // démarrage app asynchrone
 (async () => {
     try {
-        // mode de l'app
-        const mode = Modes.current();
+        Log.info(`Environment is set to ${env.ENVIRONMENT}`);
 
         // initialise modèles et connecte mongodb
-        await Models.init(mode);
+        await Models.init();
 
         // initialize bot slack
         // doit se trouver avant initialisation body parser
-        if (Modes.botIsEnabled()) {
+        if (env.SLACK_ENABLED) {
             await Bot.init(App);
         }
 
@@ -63,9 +57,6 @@ App.use(Helmet());
         // initialise routes
         Routes.set(App);
 
-        // gère modes de l'app
-        await Modes.run();
-
         // initialise parcours de bienvenue
         await Auth.initiateWelcome();
 
@@ -73,7 +64,7 @@ App.use(Helmet());
         await Jobs.init();
 
         // app listening
-        const port = process.env.PORT ?? 8787;
+        const port = env.PORT ?? 8787;
         App.listen(port, () => {
             Log.info(`Freeday running on port ${port}`);
             // évènement app prête pour tests

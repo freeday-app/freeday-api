@@ -1,7 +1,7 @@
 const Validator = require('../../services/validator.js');
 const Schemas = require('./schemas/index.js');
 const Models = require('../models/index.js');
-const Modes = require('../../services/modes.js');
+const { env } = require('../../services/env.js');
 const Tools = require('../../services/tools.js');
 const Log = require('../../services/log.js');
 const StatsLog = require('../../services/statsLog.js');
@@ -119,7 +119,7 @@ const DayoffType = {
     // disponible en mode test uniquement
     async delete(req, res) {
         try {
-            if (Modes.current() === 'test') {
+            if (env.ENVIRONMENT === 'test') {
                 await Validator.checkSchema(req, Schemas.dayoffType.get);
                 const dayoffType = await Models.DayoffType.findOneAndDelete({
                     _id: req.params.id
