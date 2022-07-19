@@ -9,8 +9,8 @@
 		"dev-test": "cross-env ENVIRONMENT=test PORT=8787 DEBUG=@slack/events-api:*,@slack/interactive-messages:* nodemon src/app.js",
 		"prepare": "husky install",
 		"test": "cross-env ENVIRONMENT=test SLACK_ENABLED=false nyc mocha --timeout 10000 --exit",
-		"lint": "eslint .",
-		"lint-fix": "eslint . --fix"
+		"lint": "eslint . --max-warnings=0",
+		"lint-fix": "eslint . --fix --max-warnings=0"
 	},
 	"dependencies": {
 		"@google-cloud/dialogflow": "^5.1.0",
