@@ -181,10 +181,10 @@ const filter = {
         fct: (ds) => ds.filter((d) => d.end <= '2019-12-10')
     },
     slackUser: {
-        value: `${[
+        value: [
             slackUsers[1].slackId,
             slackUsers[2].slackId
-        ].join(',')}`,
+        ],
         fct: (ds) => ds.filter((d) => [
             slackUsers[1].slackId,
             slackUsers[2].slackId

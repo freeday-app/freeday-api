@@ -1,5 +1,4 @@
-const Validator = require('../../services/validator.js');
-const Schemas = require('./schemas/index.js');
+const { validator, validateParamUuid } = require('../../services/validator.js');
 const Models = require('../models/index.js');
 const { env } = require('../../services/env.js');
 const Tools = require('../../services/tools.js');
@@ -11,12 +10,18 @@ const {
     ForbiddenError
 } = require('../../services/errors.js');
 
+const DayoffTypeSchemas = require('./schemas/dayoffType.json');
+
+const validateList = validator(DayoffTypeSchemas.list);
+const validateCreate = validator(DayoffTypeSchemas.create);
+const validateUpdate = validator(DayoffTypeSchemas.update);
+
 // endpoints types d'absence
 const DayoffType = {
 
     async list(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoffType.list);
+            validateList(req.query);
             const result = await DayoffType.listProxy(req.query);
             res.status(200).json(result);
         } catch (err) {
@@ -43,7 +48,7 @@ const DayoffType = {
                 case 'enabled':
                 case 'displayed':
                 case 'important':
-                    find[key] = val;
+                    find[key] = val === 'true';
                     break;
                 default:
             }
@@ -53,7 +58,7 @@ const DayoffType = {
 
     async get(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoffType.get);
+            validateParamUuid(req.params.id);
             const dayoffType = await Models.DayoffType.findOne({
                 _id: req.params.id
             }).exec();
@@ -69,7 +74,7 @@ const DayoffType = {
 
     async create(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoffType.create);
+            validateCreate(req.body);
             await DayoffType.controlName(req.body.name);
             const dayoffType = await new (Models.DayoffType)(
                 Tools.defaults(req.body, {
@@ -90,7 +95,8 @@ const DayoffType = {
 
     async update(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoffType.update);
+            validateParamUuid(req.params.id);
+            validateUpdate(req.body);
             if (req.body.name) {
                 await DayoffType.controlName(req.body.name, req.params.id);
             }
@@ -119,7 +125,7 @@ const DayoffType = {
     async delete(req, res) {
         try {
             if (env.ENVIRONMENT === 'test') {
-                await Validator.checkSchema(req, Schemas.dayoffType.get);
+                validateParamUuid(req.params.id);
                 const dayoffType = await Models.DayoffType.findOneAndDelete({
                     _id: req.params.id
                 }).exec();

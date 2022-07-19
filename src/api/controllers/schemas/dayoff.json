@@ -1,0 +1,145 @@
+{
+    "list": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "start": {
+                "type": "string",
+                "format": "date"
+            },
+            "end": {
+                "type": "string",
+                "format": "date"
+            },
+            "type": {
+                "oneOf": [{
+                    "type": "string",
+                    "format": "mongo-id"
+                }, {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "mongo-id"
+                    }
+                }]
+            },
+            "slackUser": {
+                "oneOf": [{
+                    "type": "string",
+                    "format": "slack-user-id"
+                }, {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "slack-user-id"
+                    }
+                }]
+            },
+            "status": {
+                "type": "string"
+            },
+            "order": {
+                "type": "string"
+            },
+            "page": {
+                "type": "string",
+                "format": "page"
+            },
+            "limit": {
+                "type": "string",
+                "format": "number"
+            }
+        }
+    },
+    "create": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "type",
+            "slackUserId",
+            "start"
+        ],
+        "properties": {
+            "type": {
+                "type": "string",
+                "format": "mongo-id"
+            },
+            "slackUserId": {
+                "type": "string",
+                "format": "slack-user-id"
+            },
+            "start": {
+                "type": "string",
+                "format": "date"
+            },
+            "startPeriod": {
+                "type": "string"
+            },
+            "end": {
+                "type": "string",
+                "format": "date"
+            },
+            "endPeriod": {
+                "type": "string"
+            },
+            "comment": {
+                "type": "string"
+            },
+            "force": {
+                "type": "boolean"
+            }
+        }
+    },
+    "update": {
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "properties": {
+            "type": {
+                "type": "string",
+                "format": "mongo-id"
+            },
+            "start": {
+                "type": "string",
+                "format": "date"
+            },
+            "startPeriod": {
+                "type": "string"
+            },
+            "end": {
+                "type": "string",
+                "format": "date"
+            },
+            "endPeriod": {
+                "type": "string"
+            },
+            "comment": {
+                "type": "string"
+            },
+            "cancelReason": {
+                "type": "string"
+            },
+            "force": {
+                "type": "boolean"
+            }
+        }
+    },
+    "confirm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "force": {
+                "type": "boolean"
+            }
+        }
+    },
+    "cancel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "cancelReason": {
+                "type": "string"
+            }
+        }
+    }
+}

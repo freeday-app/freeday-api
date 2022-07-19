@@ -1,5 +1,4 @@
-const Validator = require('../../services/validator.js');
-const Schemas = require('./schemas/index.js');
+const { validator } = require('../../services/validator.js');
 const Tools = require('../../services/tools.js');
 const Models = require('../models/index.js');
 const SDK = require('../../bot/utils/sdk.js');
@@ -11,6 +10,10 @@ const {
 const {
     obj: slackAuthSchema
 } = require('../models/slackAuth.js');
+
+const SlackAuthSchemas = require('./schemas/slackAuth.json');
+
+const validateRegister = validator(SlackAuthSchemas.register);
 
 const SlackAuth = {
 
@@ -71,7 +74,7 @@ const SlackAuth = {
     // handler for slack oauth route
     async register(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.slackAuth.register);
+            validateRegister(req.body);
             // gets local slack auth data
             const auth = await SlackAuth.get();
             // controls state

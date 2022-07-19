@@ -1,11 +1,14 @@
 const DayJS = require('dayjs');
 
 const Models = require('../models/index.js');
-const Schemas = require('./schemas/index.js');
 const Tools = require('../../services/tools.js');
-const Validator = require('../../services/validator.js');
+const { validator } = require('../../services/validator.js');
 const Log = require('../../services/log.js');
 const { NotFoundError } = require('../../services/errors.js');
+
+const JobSchemas = require('./schemas/job.json');
+
+const validateUpsert = validator(JobSchemas.upsert);
 
 const Job = {
 
@@ -45,7 +48,7 @@ const Job = {
 
     async upsert(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.job.upsert);
+            validateUpsert(req.body);
             const job = await Job.upsertProxy(req.params.name, req.body);
             res.status(200).json(job);
         } catch (err) {
@@ -55,7 +58,7 @@ const Job = {
 
     // updates a specific job
     async upsertProxy(jobName, data) {
-        if (!Object.keys(Job.defaults).includes(jobName)) {
+        if (!jobName || !Object.keys(Job.defaults).includes(jobName)) {
             throw new NotFoundError('This job does not exist');
         }
         const savedJob = await Models.Job.findOneAndUpdate({

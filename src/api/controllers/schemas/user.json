@@ -1,0 +1,63 @@
+{
+    "list": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "page": {
+                "type": "string",
+                "format": "page"
+            },
+            "limit": {
+                "type": "string",
+                "format": "number"
+            }
+        }
+    },
+    "create": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "username",
+            "password"
+        ],
+        "properties": {
+            "username": {
+                "type": "string",
+                "minLength": 6
+            },
+            "password": {
+                "type": "string",
+                "minLength": 6
+            },
+            "language": {
+                "type": "string"
+            },
+            "theme": {
+                "type": "string",
+                "format": "theme"
+            }
+        }
+    },
+    "update": {
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "properties": {
+            "username": {
+                "type": "string",
+                "minLength": 6
+            },
+            "password": {
+                "type": "string",
+                "minLength": 6
+            },
+            "language": {
+                "type": "string"
+            },
+            "theme": {
+                "type": "string",
+                "format": "theme"
+            }
+        }
+    }
+}

@@ -1,10 +1,13 @@
 const Models = require('../models/index.js');
-const Schemas = require('./schemas/index.js');
 const SlackDataController = require('./slackData.js');
-const Validator = require('../../services/validator.js');
+const { validator } = require('../../services/validator.js');
 const Log = require('../../services/log.js');
 const StatsLog = require('../../services/statsLog.js');
 const { InvalidSlackReferrerError } = require('../../services/errors.js');
+
+const ConfigurationSchemas = require('./schemas/configuration.json');
+
+const validateUpsert = validator(ConfigurationSchemas.upsert);
 
 const Configuration = {
 
@@ -54,7 +57,7 @@ const Configuration = {
 
     async upsert(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.configuration.upsert);
+            validateUpsert(req.body);
             const conf = await Configuration.upsertProxy(req.body);
             StatsLog.logEditConfig(req.auth.userId);
             res.status(200).json(conf);

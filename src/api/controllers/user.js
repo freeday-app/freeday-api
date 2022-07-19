@@ -1,5 +1,4 @@
-const Validator = require('../../services/validator.js');
-const Schemas = require('./schemas/index.js');
+const { validator, validateParamUuid } = require('../../services/validator.js');
 const Models = require('../models/index.js');
 const Crypt = require('../../services/crypt.js');
 const Log = require('../../services/log.js');
@@ -10,11 +9,18 @@ const {
     ForbiddenError
 } = require('../../services/errors.js');
 
+const UserSchemas = require('./schemas/user.json');
+
+const validateList = validator(UserSchemas.list);
+const validateCreate = validator(UserSchemas.create);
+const validateUpdate = validator(UserSchemas.update);
+
 // endpoints utilisateurs administrateurs de Freeday
 const User = {
 
     async list(req, res) {
         try {
+            validateList(req.query);
             const result = await Models.User.paginateToResult(
                 'users',
                 req.query.page,
@@ -30,7 +36,7 @@ const User = {
 
     async get(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.user.get);
+            validateParamUuid(req.params.id);
             const user = await Models.User.findOne({
                 _id: req.params.id
             }).exec();
@@ -51,7 +57,7 @@ const User = {
 
     async create(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.user.create);
+            validateCreate(req.body);
             const user = await User.createProxy(req.body);
             StatsLog.logAddAdmin(req.auth.userId);
             res.status(200).json(user);
@@ -75,7 +81,8 @@ const User = {
 
     async update(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.user.update);
+            validateParamUuid(req.params.id);
+            validateUpdate(req.body);
             if (req.body.username) {
                 await User.controlUsername(req.body.username, req.params.id);
             }
@@ -115,7 +122,7 @@ const User = {
 
     async delete(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.user.get);
+            validateParamUuid(req.params.id);
             if (req.params.id.toString() !== req.auth.userId.toString()) {
                 const user = await Models.User.findOneAndDelete({
                     _id: req.params.id

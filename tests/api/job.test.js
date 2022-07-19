@@ -62,7 +62,7 @@ describe('[API] Jobs', () => {
             }
         });
 
-        it('Should edit the job\'s settings', async () => {
+        it("Should edit the job's settings", async () => {
             const jobName = 'monthlyRecap';
             const job = {
                 enabled: true,
@@ -71,6 +71,7 @@ describe('[API] Jobs', () => {
             const response = await API.request()
                 .post(`/api/jobs/${jobName}`)
                 .send(job);
+            console.log(JSON.stringify(response.body, null, 4));
             expect(response).to.have.status(200);
             expect(response).to.be.json;
             const { body } = response;

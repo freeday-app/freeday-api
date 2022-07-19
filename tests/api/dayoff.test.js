@@ -412,12 +412,12 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                     force: true
                 });
             }
-            const doFilter = async (param, val, filterFct) => {
-                const params = Array.isArray(param) ? param : [param];
-                const vals = Array.isArray(val) ? val : [val];
-                const filterFcts = Array.isArray(filterFct) ? filterFct : [filterFct];
-                const query = params.map((p, i) => `${p}=${vals[i]}`).join('&');
-
+            const doFilter = async (params, vals, filterFcts) => {
+                const query = params.map((p, i) => (
+                    (Array.isArray(vals[i]) ? vals[i] : [vals[i]]).map((v) => (
+                        `${p}=${v}`
+                    )).join('&')
+                )).join('&');
                 const response = await API.request()
                     .get(`/api/daysoff?${query}`);
                 expect(response).to.have.status(200);
@@ -445,7 +445,13 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
             };
             for (const parameter of Object.keys(Data.filter)) {
                 const { value, fct } = Data.filter[parameter];
-                await doFilter(parameter, value, fct);
+                await doFilter([
+                    parameter
+                ], [
+                    value
+                ], [
+                    fct
+                ]);
             }
             await doFilter([
                 'start',
@@ -487,11 +493,22 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                 Data.filter.start.fct,
                 (ds) => sortDaysoff(ds, 'desc')
             ]);
-            await doFilter(
-                'type',
-                dayoffTypes[0].id,
+            await doFilter([
+                'type'
+            ], [
+                dayoffTypes[0].id
+            ], [
                 (ds) => ds.filter((d) => d.type.id === dayoffTypes[0].id)
-            );
+            ]);
+            await doFilter([
+                'type'
+            ], [
+                [dayoffTypes[0].id, dayoffTypes[1].id]
+            ], [
+                (ds) => ds.filter((d) => (
+                    [dayoffTypes[0].id, dayoffTypes[1].id].includes(d.type.id)
+                ))
+            ]);
             await doFilter([
                 'start',
                 'type'

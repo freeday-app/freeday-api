@@ -167,7 +167,7 @@ describe('[API] Slack', () => {
     describe('GET /api/slack/users/:id', () => {
         it('Should throw validation error', async () => {
             const response = await API.request()
-                .get('/api/slack/users/InvalidMongoId');
+                .get('/api/slack/users/InvalidId');
             expect(response).to.have.status(400);
             expect(response).to.be.json;
             const { body } = response;
@@ -280,7 +280,7 @@ describe('[API] Slack', () => {
     describe('GET /api/slack/channels/:id', () => {
         it('Should throw validation error', async () => {
             const response = await API.request()
-                .get('/api/slack/channels/InvalidMongoId');
+                .get('/api/slack/channels/InvalidId');
             expect(response).to.have.status(400);
             expect(response).to.be.json;
             const { body } = response;

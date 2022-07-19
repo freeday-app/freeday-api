@@ -1,8 +1,7 @@
 const DayJS = require('dayjs');
 
 const Models = require('../models/index.js');
-const Schemas = require('./schemas/index.js');
-const Validator = require('../../services/validator.js');
+const { validator } = require('../../services/validator.js');
 const Tools = require('../../services/tools.js');
 const StatsLog = require('../../services/statsLog.js');
 const Crypt = require('../../services/crypt.js');
@@ -15,13 +14,19 @@ const {
 } = require('../../services/errors.js');
 const UserController = require('./user.js');
 
+const AuthSchemas = require('./schemas/auth.json');
+const UserSchemas = require('./schemas/user.json');
+
+const validateLogin = validator(AuthSchemas.login);
+const validateWelcome = validator(UserSchemas.create);
+
 const Auth = {
 
     // endpoint authentification
     async login(req, res) {
         try {
             // contrôle données postées
-            await Validator.checkSchema(req, Schemas.auth.login);
+            validateLogin(req.body);
             // cherche user par username
             const user = await Models.User.findOne({
                 username: req.body.username
@@ -72,16 +77,21 @@ const Auth = {
         });
     },
 
+    // check authorization token is set in request headers
+    // if token is set returns it without Bearer prefix
+    checkAuthHeader(req) {
+        const token = req.get('Authorization');
+        if (token) {
+            return token.replace('Bearer ', '');
+        }
+        throw new AuthenticationError();
+    },
+
     // middleware contrôle token authentification
     async middleware(req, res, next) {
         try {
-            // contrôle données postées
-            await Validator.checkSchema(req, Schemas.auth.check);
             // contrôle token
-            const token = req.get('Authorization');
-            if (!token) {
-                throw new AuthenticationError();
-            }
+            const token = Auth.checkAuthHeader(req);
             // cherche token valide correspondant en base
             const result = await Models.Token.findOneAndUpdate({
                 $and: [{
@@ -202,11 +212,10 @@ const Auth = {
     // endpoint checking validity of a welcome secret
     async checkWelcome(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.auth.check);
+            // gets secret
+            const base64Secret = Auth.checkAuthHeader(req);
             // checks that instance is empty
             await Auth.isEmpty(true);
-            // gets post secret
-            const base64Secret = req.get('Authorization');
             // checks secret validity
             await Auth.checkWelcomeSecret(base64Secret);
             //
@@ -219,14 +228,12 @@ const Auth = {
     // endpoint used to handle welcome
     async doWelcome(req, res) {
         try {
-            await Validator.checkSchema(req, {
-                ...Schemas.auth.welcome,
-                ...Schemas.auth.check
-            });
+            // gets secret
+            const base64Secret = Auth.checkAuthHeader(req);
+            // check post data
+            validateWelcome(req.body);
             // checks that instance is empty
             await Auth.isEmpty(true);
-            // gets post secret
-            const base64Secret = req.get('Authorization');
             // checks secret validity
             await Auth.checkWelcomeSecret(base64Secret);
             //

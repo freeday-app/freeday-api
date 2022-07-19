@@ -1,5 +1,6 @@
-const Validator = require('../../services/validator.js');
-const Schemas = require('./schemas/index.js');
+const DayJS = require('dayjs');
+
+const { validator, validateParamUuid } = require('../../services/validator.js');
 const Models = require('../models/index.js');
 const Notify = require('../../bot/utils/notify.js');
 const DayoffService = require('../../services/dayoff.js');
@@ -15,6 +16,14 @@ const {
 } = require('../../services/errors.js');
 const ConfigurationController = require('./configuration.js');
 
+const DayoffSchemas = require('./schemas/dayoff.json');
+
+const validateList = validator(DayoffSchemas.list);
+const validateCreate = validator(DayoffSchemas.create);
+const validateUpdate = validator(DayoffSchemas.update);
+const validateConfirm = validator(DayoffSchemas.confirm);
+const validateCancel = validator(DayoffSchemas.cancel);
+
 const Dayoff = {
 
     types: ['dayoff', 'sick'],
@@ -22,7 +31,7 @@ const Dayoff = {
 
     async list(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff.list);
+            validateList(req.query);
             const result = await Dayoff.listProxy(req.query);
             res.status(200).json(result);
         } catch (err) {
@@ -49,17 +58,17 @@ const Dayoff = {
             switch (key) {
                 case 'start':
                     find.$or = [
-                        { end: { $gte: val } },
+                        { end: { $gte: DayJS(val).toDate() } },
                         {
                             $and: [
                                 { end: { $eq: null } },
-                                { start: { $gte: val } }
+                                { start: { $gte: DayJS(val).toDate() } }
                             ]
                         }
                     ];
                     break;
                 case 'end':
-                    find.start = { $lte: val };
+                    find.start = { $lte: DayJS(val).toDate() };
                     break;
                 case 'type':
                     find['type._id'] = {
@@ -102,7 +111,7 @@ const Dayoff = {
 
     async get(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff.get);
+            validateParamUuid(req.params.id);
             const dayoff = await Dayoff.getProxy(req.params.id);
             res.status(200).json(dayoff);
         } catch (err) {
@@ -120,7 +129,7 @@ const Dayoff = {
 
     async conflicts(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff.get);
+            validateParamUuid(req.params.id);
             const dayoff = await Dayoff.getProxy(req.params.id);
             const conflicts = await DayoffService.getConflicts(dayoff);
             res.status(200).json({ conflicts });
@@ -131,7 +140,7 @@ const Dayoff = {
 
     async create(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff.create);
+            validateCreate(req.body);
             const dayoff = await Dayoff.createProxy(req.body);
             StatsLog.logClientCreateDayOff(req.auth.userId, req.body.slackUserId);
             res.status(200).json(dayoff);
@@ -216,7 +225,8 @@ const Dayoff = {
 
     async update(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff.update);
+            validateParamUuid(req.params.id);
+            validateUpdate(req.body);
             const dayoff = await Dayoff.updateProxy(req.params.id, req.body);
             StatsLog.logClientEditDayOff(req.auth.userId, dayoff.slackUser.slackId);
             res.status(200).json(dayoff);
@@ -308,7 +318,7 @@ const Dayoff = {
     async delete(req, res) {
         try {
             if (env.ENVIRONMENT === 'test') {
-                await Validator.checkSchema(req, Schemas.dayoff.get);
+                validateParamUuid(req.params.id);
                 const dayoff = await Models.Dayoff.findOneAndDelete({
                     _id: req.params.id
                 }).exec();
@@ -343,7 +353,13 @@ const Dayoff = {
     async reset(req, res) { Dayoff.action(req, res, 'reset'); },
     async action(req, res, action) {
         try {
-            await Validator.checkSchema(req, Schemas.dayoff[action]);
+            validateParamUuid(req.params.id);
+            if (action === 'confirm') {
+                validateConfirm(req.body);
+            }
+            if (action === 'cancel') {
+                validateCancel(req.body);
+            }
             const dayoff = await Dayoff.actionProxy({
                 action,
                 id: req.params.id,

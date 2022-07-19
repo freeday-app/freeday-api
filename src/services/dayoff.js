@@ -17,6 +17,11 @@ const DayoffService = {
     // calcule compte de jours total en prenant en compte demi-journées
     process(data, workDays, withMeta = true) {
         const dayoffData = data;
+        ['start', 'end'].forEach((field) => {
+            if (dayoffData[field] && !(dayoffData[field] instanceof Date)) {
+                dayoffData[field] = DayJS(dayoffData[field]).toDate();
+            }
+        });
         // contrôle que date début inférieure à date de fin
         const startFormat = DayJS(dayoffData.start).format('YYYY-MM-DD');
         const endFormat = DayJS(dayoffData.end).format('YYYY-MM-DD');

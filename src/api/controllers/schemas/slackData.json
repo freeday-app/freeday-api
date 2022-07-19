@@ -1,0 +1,111 @@
+{
+    "listUsers": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "deleted": {
+                "type": "string",
+                "enum": ["true", "false"]
+            },
+            "page": {
+                "type": "string",
+                "format": "page"
+            },
+            "limit": {
+                "type": "string",
+                "format": "number"
+            }
+        }
+    },
+    "createUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "slackId",
+            "name",
+            "avatar",
+            "locale"
+        ],
+        "properties": {
+            "slackId": {
+                "type": "string",
+                "format": "slack-user-id"
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1
+            },
+            "avatar": {
+                "type": "string",
+                "minLength": 1
+            },
+            "locale": {
+                "type": "string",
+                "minLength": 1
+            },
+            "forcedLocale": {
+                "type": "string"
+            },
+            "deleted": {
+                "type": "boolean"
+            }
+        }
+    },
+    "listChannels": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "onlyMember": {
+                "type": "string",
+                "enum": ["true", "false"]
+            },
+            "page": {
+                "type": "string",
+                "format": "page"
+            },
+            "limit": {
+                "type": "string",
+                "format": "number"
+            }
+        }
+    },
+    "createChannel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "slackId",
+            "name"
+        ],
+        "properties": {
+            "slackId": {
+                "type": "string",
+                "format": "slack-id"
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1
+            },
+            "isChannel": {
+                "type": "boolean"
+            },
+            "isGroup": {
+                "type": "boolean"
+            },
+            "isIm": {
+                "type": "boolean"
+            },
+            "isMpIm": {
+                "type": "boolean"
+            },
+            "isMember": {
+                "type": "boolean"
+            },
+            "isPrivate": {
+                "type": "boolean"
+            },
+            "archived": {
+                "type": "boolean"
+            }
+        }
+    }
+}

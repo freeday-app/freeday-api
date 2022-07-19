@@ -1,0 +1,23 @@
+{
+    "upsert": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "enabled": {
+                "type": "boolean"
+            },
+            "hour": {
+                "type": "string",
+                "format": "cron-hour"
+            },
+            "minute": {
+                "type": "string",
+                "format": "cron-minute"
+            },
+            "dayOfMonth": {
+                "type": "string",
+                "format": "cron-day-of-month"
+            }
+        }
+    }
+}

@@ -1,5 +1,8 @@
-const Validator = require('../../services/validator.js');
-const Schemas = require('./schemas/index.js');
+const {
+    validator,
+    validateParamSlackId,
+    validateParamSlackUserId
+} = require('../../services/validator.js');
 const Log = require('../../services/log.js');
 const { env } = require('../../services/env.js');
 const Tools = require('../../services/tools.js');
@@ -9,6 +12,13 @@ const {
     NotFoundError,
     ForbiddenError
 } = require('../../services/errors.js');
+
+const SlackDataSchemas = require('./schemas/slackData.json');
+
+const validateListUsers = validator(SlackDataSchemas.listUsers);
+const validateCreateUser = validator(SlackDataSchemas.createUser);
+const validateListChannels = validator(SlackDataSchemas.listChannels);
+const validateCreateChannel = validator(SlackDataSchemas.createChannel);
 
 const SlackData = {
 
@@ -40,7 +50,7 @@ const SlackData = {
     // liste users slack enregistrés en base avec synchro api slack
     async listUsers(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.slackData.listUsers);
+            validateListUsers(req.query);
             // synchronise users slack avec api slack
             if (env.SLACK_ENABLED) {
                 await SlackData.syncUsers();
@@ -56,7 +66,7 @@ const SlackData = {
         // gère filtrage
         const find = {};
         if (Object.hasOwnProperty.call(query, 'deleted')) {
-            find.deleted = query.deleted;
+            find.deleted = query.deleted === 'true';
         }
         // liste users slack
         const result = await Models.SlackUser.paginateToResult(
@@ -79,7 +89,7 @@ const SlackData = {
     // renvoie données user slack enregistré en base
     async getUser(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.slackData.getUser);
+            validateParamSlackUserId(req.params.slackId);
             const slackUser = await Models.SlackUser.findOne({
                 slackId: req.params.slackId
             }).exec();
@@ -97,7 +107,7 @@ const SlackData = {
     async upsertUser(req, res) {
         try {
             if (env.ENVIRONMENT === 'test') {
-                await Validator.checkSchema(req, Schemas.slackData.createUser);
+                validateCreateUser(req.body);
                 const slackUser = await SlackData.upsertUserProxy(req.body);
                 res.status(200).json(slackUser.toJSON());
             } else {
@@ -296,7 +306,7 @@ const SlackData = {
     // liste channels slack enregistrés en base avec synchro api slack
     async listChannels(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.slackData.listChannels);
+            validateListChannels(req.query);
             // synchronise channels slack avec api slack
             if (env.SLACK_ENABLED) {
                 await SlackData.syncChannels();
@@ -336,7 +346,7 @@ const SlackData = {
     // renvoie données channel slack
     async getChannel(req, res) {
         try {
-            await Validator.checkSchema(req, Schemas.slackData.getChannel);
+            validateParamSlackId(req.params.slackId);
             const slackChannel = await SlackData.getChannelProxy(req.params.slackId);
             if (slackChannel !== null) {
                 res.status(200).json(slackChannel.toJSON());
@@ -358,7 +368,7 @@ const SlackData = {
     async upsertChannel(req, res) {
         try {
             if (env.ENVIRONMENT === 'test') {
-                await Validator.checkSchema(req, Schemas.slackData.createChannel);
+                validateCreateChannel(req.body);
                 const slackChannel = {
                     isChannel: true,
                     isGroup: false,

@@ -48,7 +48,7 @@ App.use('/api/*', Helmet());
         // initialise body parser
         App.use(Express.json());
         App.use(Express.urlencoded({
-            extended: false
+            extended: true
         }));
 
         // errors middleware
