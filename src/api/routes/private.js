@@ -6,9 +6,6 @@ module.exports = (App, authMid) => {
     // testing welcome route
     App.put('/api/auth/welcome', authMid, Controllers.auth.initiateTest);
 
-    // authentification app slack
-    App.get('/api/slack/auth', authMid, Controllers.slackAuth.url);
-    App.post('/api/slack/auth', authMid, Controllers.slackAuth.register);
     // utilisateurs slacks en base
     App.get('/api/slack/users', authMid, Controllers.slackData.listUsers);
     App.post('/api/slack/users', authMid, Controllers.slackData.upsertUser);

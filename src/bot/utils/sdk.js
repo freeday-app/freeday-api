@@ -2,13 +2,8 @@ const { WebClient, ErrorCode } = require('@slack/web-api');
 const { App: SlackApp, ExpressReceiver } = require('@slack/bolt');
 
 const Log = require('../../services/log.js');
-const Models = require('../../api/models/index.js');
-const Tools = require('../../services/tools.js');
 const { env } = require('../../services/env.js');
-const {
-    InternError,
-    SlackOAuthError
-} = require('../../services/errors.js');
+const { InternError } = require('../../services/errors.js');
 
 const SDK = {
 
@@ -54,38 +49,22 @@ const SDK = {
     // gets web client
     async web() {
         if (!SDK.webClient) {
-            const auth = await Models.SlackAuth.findOne();
-            SDK.initWebClient(auth.toJSON());
+            SDK.initWebClient(env.SLACK_ACCESS_TOKEN);
             if (SDK.webClient === null) {
-                // no token in database
-                throw new InternError('Slack web client is inactive');
+                throw new InternError('Could not initialize Slack client');
             }
             const isClientValid = await SDK.testWebClient();
             if (!isClientValid) {
-                // token in database is invalid
-                // remove it and delete the webclient
-                await Models.SlackAuth.updateOne({}, { accessToken: null });
                 SDK.webClient = null;
-                throw new InternError('Slack web client is inactive');
+                throw new InternError('Slack client authentication failed');
             }
-            Log.info('Retrieved valid token');
-        } else {
-            const isClientValid = await SDK.testWebClient();
-            if (!isClientValid) {
-                // token is invalid, delete the webclient
-                // then call this function again to try to recreate it from database
-                // no more recursion because this code is unreachable if webclient is null
-                Log.warn('Invalid token, attempting to retrieve from database');
-                SDK.webClient = null;
-                return SDK.web();
-            }
+            Log.info('Initialized Slack client');
         }
         return SDK.webClient;
     },
 
     // initializes web client
     initWebClient(accessToken) {
-        // SDK.webClient = auth && auth.accessToken ? new WebClient(auth.accessToken) : null;
         SDK.webClient = accessToken ? new WebClient(accessToken) : null;
     },
 
@@ -103,34 +82,8 @@ const SDK = {
         return true;
     },
 
-    // checks slack oauth code validity and returns result if valid
-    async checkOAuthCode(code) {
-        try {
-            const result = await (new WebClient()).oauth.v2.access({
-                client_id: env.SLACK_CLIENT_ID,
-                client_secret: env.SLACK_CLIENT_SECRET,
-                redirect_uri: SDK.redirectUrl(),
-                code
-            });
-            if (!result.ok) {
-                throw new SlackOAuthError();
-            }
-            return {
-                teamId: result.team.id,
-                accessToken: result.access_token
-            };
-        } catch (err) {
-            throw new SlackOAuthError();
-        }
-    },
-
     isActive() {
         return !!SDK.webClient;
-    },
-
-    // generates redirect uri
-    getRedirectUrl() {
-        return Tools.buildUrl(env.PUBLIC_URL, 'register');
     }
 };
 

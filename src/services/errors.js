@@ -22,11 +22,6 @@ class AuthenticationError extends CustomError {
         super(message, 401, 4010);
     }
 }
-class SlackOAuthError extends CustomError {
-    constructor(message = 'Slack OAuth failed') {
-        super(message, 401, 4011);
-    }
-}
 class WelcomeSecretError extends CustomError {
     constructor(message = 'Welcome authentication error') {
         super(message, 401, 4012);
@@ -130,7 +125,6 @@ module.exports = {
     NotFoundError,
     ValidationError,
     AuthenticationError,
-    SlackOAuthError,
     NoWorkDaysError,
     EndBeforeStartError,
     DisabledDayoffTypeError,

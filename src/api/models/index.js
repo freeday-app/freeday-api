@@ -5,7 +5,6 @@ const DayoffModel = require('./dayoff.js');
 const DayoffTypeModel = require('./dayoffType.js');
 const JobModel = require('./job.js');
 const JobEventModel = require('./jobEvent.js');
-const SlackAuthModel = require('./slackAuth.js');
 const SlackChannelModel = require('./slackChannel.js');
 const SlackUserModel = require('./slackUser.js');
 const StatsLogModel = require('./statsLog.js');
@@ -28,7 +27,6 @@ const Models = {
         DayoffType: Paginator.setMethods(DayoffTypeModel),
         Job: Paginator.setMethods(JobModel),
         JobEvent: Paginator.setMethods(JobEventModel),
-        SlackAuth: Paginator.setMethods(SlackAuthModel),
         SlackChannel: Paginator.setMethods(SlackChannelModel),
         SlackUser: Paginator.setMethods(SlackUserModel),
         StatsLog: Paginator.setMethods(StatsLogModel),
@@ -117,7 +115,6 @@ const Models = {
             // efface collections
             await Models.User.deleteMany();
             await Models.Dayoff.deleteMany();
-            await Models.SlackAuth.deleteMany();
             await Models.SlackUser.deleteMany();
             await Models.SlackChannel.deleteMany();
             await Models.Token.deleteMany();

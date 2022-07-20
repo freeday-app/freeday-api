@@ -1,8 +1,5 @@
 const { expect } = require('chai');
 const API = require('../utils/api.js');
-const { assertLastLogEntryValues } = require('../utils/statslog.js');
-const SlackAuthController = require('../../src/api/controllers/slackAuth.js');
-const SlackSDK = require('../../src/bot/utils/sdk.js');
 const Data = require('./data/global.data.js');
 
 const slackUsersById = {};
@@ -310,82 +307,6 @@ describe('[API] Slack', () => {
             const { body } = response;
             expect(body).to.be.an('object');
             assertSlackChannel(body, Data.slackChannels[0]);
-        });
-    });
-
-    describe('GET /api/slack/auth', () => {
-        it('Should return Slack OAuth URL', async () => {
-            const expectedUrl = encodeURI(process.env.PUBLIC_URL);
-            const response = await API.request()
-                .get('/api/slack/auth');
-            expect(response).to.have.status(200);
-            expect(response).to.be.json;
-            const { body } = response;
-            expect(body).to.be.an('object');
-            expect(body).to.have.property('url');
-            expect(body.url).to.match(/^https:\/\/slack.com\/oauth\/v2\/authorize/);
-            expect(body.url).to.match(/client_id=[0-9.]+/);
-            expect(body.url).to.match(/scope=[a-z:%20]+/);
-            expect(body.url).to.match(/state=[a-zA-Z0-9]+/);
-            expect(body.url).to.include(`redirect_uri=${expectedUrl}`);
-        });
-    });
-
-    describe('POST /api/slack/auth', () => {
-        it('Should throw validation error', async () => {
-            const response = await API.request()
-                .post('/api/slack/auth')
-                .send({
-                    wrong: 'data'
-                });
-            expect(response).to.have.status(400);
-            expect(response).to.be.json;
-            const { body } = response;
-            expect(body).to.be.an('object');
-            expect(body).to.have.property('error');
-            expect(body).to.have.property('code');
-            expect(body.code).to.equal(4000);
-        });
-
-        // SlackAuthController
-        it('Should register Slack app after OAuth', async () => {
-            // mocks sdk oauth verification
-            const authData = {
-                teamId: 'TE85A2X11',
-                accessToken: 'xoxb-abcdef0123456789'
-            };
-            SlackSDK.checkOAuthCode = async () => (authData);
-            // generates oauth state
-            const urlResponse = await API.request()
-                .get('/api/slack/auth');
-            expect(urlResponse).to.have.status(200);
-            assertLastLogEntryValues({
-                interface: 'client',
-                type: 'installapp',
-                user: API.user.id
-            });
-            // gets expected state from slack auth controller
-            const slackAuth = await SlackAuthController.get();
-            const { state } = slackAuth;
-            // registers slack app
-            const response = await API.request()
-                .post('/api/slack/auth')
-                .send({
-                    code: 'someFakeCode',
-                    state
-                });
-            expect(response).to.have.status(200);
-            expect(response).to.be.json;
-            const { body } = response;
-            expect(body).to.be.an('object');
-            // gets state from slack auth controller after register
-            const auth = await SlackAuthController.get();
-            expect(auth).to.have.property('state');
-            expect(auth.state).to.equal(state);
-            expect(auth).to.have.property('teamId');
-            expect(auth.teamId).to.equal(authData.teamId);
-            expect(auth).to.have.property('accessToken');
-            expect(auth.accessToken).to.equal(authData.accessToken);
         });
     });
 });
