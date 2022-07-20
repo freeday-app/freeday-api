@@ -1,5 +1,6 @@
 const Attachments = require('../views/attachments.js');
 const SDK = require('./sdk.js');
+const MessageDispatcher = require('./messageDispatcher.js');
 const Log = require('../../services/log.js');
 const StatsLog = require('../../services/statsLog.js');
 const LanguageService = require('../../services/language.js');
@@ -7,23 +8,34 @@ const LanguageService = require('../../services/language.js');
 const Notify = {
 
     // send message content to user
-    async send(userId, content) {
+    async send(userId, content, dispatch = false) {
         if (SDK.isActive()) {
-            const SDKWeb = await SDK.web();
-            await SDKWeb.chat.postMessage({
+            const data = {
                 channel: userId,
                 as_user: true,
                 ...content
-            });
+            };
+            if (dispatch) {
+                const SDKWeb = await SDK.web();
+                await SDKWeb.chat.postMessage(data);
+            } else {
+                MessageDispatcher.post(data);
+            }
             StatsLog.logNotifyUser(userId);
         }
     },
 
     // envoie messages confirmations à utilisateur après opération absence
-    confirmCreate: async (userId, dayoff) => Notify.confirm('create', userId, dayoff),
-    confirmEdit: async (userId, dayoff) => Notify.confirm('edit', userId, dayoff),
-    confirmDelete: async (userId, dayoff) => Notify.confirm('delete', userId, dayoff, '#CCCCCC', false),
-    async confirm(type, userId, dayoff, color = null, status = true) {
+    confirmCreate: async (userId, dayoff, dispatch = false) => (
+        Notify.confirm('create', userId, dayoff, null, true, dispatch)
+    ),
+    confirmEdit: async (userId, dayoff) => (
+        Notify.confirm('edit', userId, dayoff, null, true)
+    ),
+    confirmDelete: async (userId, dayoff) => (
+        Notify.confirm('delete', userId, dayoff, '#CCCCCC', false)
+    ),
+    async confirm(type, userId, dayoff, color = null, status = true, dispatch = false) {
         Log.info(`Sending ${type} confirmation to channel ${userId} for dayoff ${dayoff.id}`);
         // récupère une fonction permettant d'obtenir le texte dans la langue de l'utilisateur
         const getText = await LanguageService.getUserLocaleAccessor(userId);
@@ -40,7 +52,7 @@ const Notify = {
                 ...dayoffAttachment,
                 color: color || dayoffAttachment.color
             }]
-        });
+        }, dispatch);
     },
 
     // envoie messages notifications à référent après opération absence
