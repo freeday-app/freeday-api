@@ -5,33 +5,36 @@ name: freeday-api
 trigger:
   branch:
   - dev
+  event:
+  - push
+  - pull_request
 
 services:
 - name: mongo
   image: mongo:latest
 
 steps:
-- name: dependencies
-  image: node:14-alpine
+- name: install
+  image: node:16-alpine
   pull: if-not-exists
   commands:
-  - npm i
+  - npm ci
 - name: lint
-  image: node:14-alpine
+  image: node:16-alpine
   pull: if-not-exists
   commands:
   - npm run lint
   depends_on:
-  - dependencies
+  - install
 - name: test
-  image: node:14-alpine
+  image: node:16-alpine
   pull: if-not-exists
   commands:
   - cp .env.ci .env
   - mkdir -p /var/log/freeday
   - npm run test
   depends_on:
-  - dependencies
+  - install
 - name: sonarqube
   image: pitininja/drone-sonar-plugin:latest
   settings:
@@ -40,7 +43,12 @@ steps:
     sonar_token:
       from_secret: sonar_token
   depends_on:
-  - dependencies
+  - install
+  when:
+    branch:
+    - dev
+    event:
+    - push
 
 ---
 kind: pipeline
