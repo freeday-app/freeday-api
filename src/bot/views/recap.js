@@ -2,7 +2,7 @@ const DayJS = require('dayjs');
 
 const DayoffController = require('../../api/controllers/dayoff.js');
 const Attachments = require('./attachments.js');
-const SDK = require('../utils/sdk.js');
+const MessageDispatcher = require('../utils/messageDispatcher.js');
 
 const Recap = {
 
@@ -20,10 +20,8 @@ const Recap = {
         const daysoff = await Recap.getDaysoff(slackUserId);
         // attachments absences
         const attachments = Recap.getAttachments(getText, daysoff);
-
-        // envoie recap sur slack
-        const SDKWeb = await SDK.web();
-        await SDKWeb.chat.postMessage({
+        // send dayoff summary with dispatcher
+        MessageDispatcher.post({
             channel: channelId,
             text: getText('menu.monthly_recap.title'),
             attachments

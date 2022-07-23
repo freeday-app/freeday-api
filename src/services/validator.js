@@ -22,6 +22,7 @@ ajv.addFormat('base64', /^(?:data:\w+\/[a-zA-Z+-.]+;base64,)(?:[A-Za-z0-9+/]{4})
 ajv.addFormat('mongo-id', /^[0-9a-fA-F]{24}$/);
 ajv.addFormat('page', /^all|\d+$/);
 ajv.addFormat('number', /^\d+$/);
+ajv.addFormat('period', /^(?:am|pm)$/);
 
 // return a function that validates data against a json schema
 const validator = (schema) => {

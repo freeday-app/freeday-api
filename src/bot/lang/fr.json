@@ -83,6 +83,7 @@
 	},
 	"notifications": {
 		"referrer_create": "Une absence de %s a été ajoutée",
+		"referrer_bulkCreate": "Une absence a été ajoutée pour %s utilisateurs",
 		"referrer_edit": "Une absence de %s a été modifiée",
 		"referrer_delete": "Une absence de %s a été supprimée",
 		"referrer_cancel": "Une absence de %s a été annulée",

@@ -26,9 +26,6 @@ const validateCancel = validator(DayoffSchemas.cancel);
 
 const Dayoff = {
 
-    types: ['dayoff', 'sick'],
-    periods: ['am', 'pm'],
-
     async list(req, res) {
         try {
             validateList(req.query);
@@ -141,9 +138,14 @@ const Dayoff = {
     async create(req, res) {
         try {
             validateCreate(req.body);
-            const dayoff = await Dayoff.createProxy(req.body);
-            StatsLog.logClientCreateDayOff(req.auth.userId, req.body.slackUserId);
-            res.status(200).json(dayoff);
+            if (Array.isArray(req.body.slackUserId)) {
+                const daysoff = await Dayoff.bulkCreateProxy(req.body);
+                res.status(200).json({ daysoff });
+            } else {
+                const dayoff = await Dayoff.createProxy(req.body);
+                StatsLog.logClientCreateDayOff(req.auth.userId, req.body.slackUserId);
+                res.status(200).json(dayoff);
+            }
         } catch (err) {
             if (err instanceof NotifyReferrerError) {
                 res.status(206).json({
@@ -172,13 +174,6 @@ const Dayoff = {
         if (!slackUser) {
             throw new ValidationError(`Wrong Slack user ID ${data.slackUserId}`);
         }
-        // contrôle demi-journées
-        ['start', 'end'].forEach((p) => {
-            const period = `${p}Period`;
-            if (data[period] && !Dayoff.periods.includes(data[period])) {
-                throw new ValidationError(`Wrong ${p} period ${data[period]}`);
-            }
-        });
         // données de configuration necessaires à l'ajout d'absence
         const { slackReferrer, workDays } = await ConfigurationController.getProxy();
         // process données absence
@@ -221,6 +216,94 @@ const Dayoff = {
             return dayoff.toJSON();
         }
         throw new NotFoundError('Dayoff not found');
+    },
+
+    async bulkCreateProxy(data) {
+        // contrôle type d'absence
+        const dayoffType = await DayoffService.controlType(data.type);
+        // contrôle user slack
+        const slackUserIds = data.slackUserId;
+        const slackUsers = await Models.SlackUser.find({
+            slackId: {
+                $in: slackUserIds
+            }
+        }).exec();
+        const slackUsersById = Object.fromEntries(
+            slackUsers.map((user) => [user.slackId, user])
+        );
+        slackUserIds.forEach((slackId) => {
+            if (!slackUsersById[slackId]) {
+                throw new ValidationError(`Wrong Slack user ID ${data.slackUserId}`);
+            }
+        });
+        // données de configuration necessaires à l'ajout d'absence
+        const { slackReferrer, workDays } = await ConfigurationController.getProxy();
+        // process données absence
+        const dayoffData = DayoffService.process({
+            ...data,
+            type: dayoffType,
+            slackUser: {}
+        }, workDays);
+        // insert multiple daysoff
+        const { insertedIds } = await Models.Dayoff.insertMany(
+            slackUsers.map((user) => {
+                const slackUser = user.toJSON ? user.toJSON() : user;
+                delete slackUser._id;
+                delete slackUser.id;
+                return {
+                    ...dayoffData,
+                    slackUser
+                };
+            }),
+            { rawResult: true }
+        );
+        // get inserted daysoff documents
+        const daysoff = await Models.Dayoff.find({
+            _id: {
+                $in: Object.values(insertedIds)
+            }
+        }).exec();
+        // insère données absence en base
+        if (env.SLACK_ENABLED) {
+            const errorQueue = [];
+            daysoff.forEach(async (dayoff) => {
+                try {
+                    // send dayoff creation to user with message dispatcher
+                    await Notify.confirmCreate(dayoff.slackUser.slackId, dayoff, true);
+                } catch (err) {
+                    errorQueue.push(
+                        new NotifyUserError(
+                            'Could not send a notification to the Slack user',
+                            dayoff.toJSON()
+                        )
+                    );
+                }
+            });
+            const referrerData = {
+                ...daysoff[0],
+                bulkCount: daysoff.length
+            };
+            try {
+                if (slackReferrer) {
+                    await Notify.referrerBulkCreate(slackReferrer, referrerData);
+                }
+            } catch (err) {
+                errorQueue.push(
+                    new NotifyReferrerError(
+                        'Could not send a notification to the Slack referrer',
+                        referrerData
+                    )
+                );
+            }
+            if (errorQueue.length > 0) {
+                throw errorQueue.shift();
+            }
+        }
+        //
+        return daysoff.map((dayoff) => {
+            Log.info(`Dayoff ${dayoff.id} created`);
+            return dayoff.toJSON();
+        });
     },
 
     async update(req, res) {
@@ -269,13 +352,6 @@ const Dayoff = {
         // réinitialise statut absence après modification
         dayoffData.canceled = false;
         dayoffData.confirmed = false;
-        // contrôle champs date
-        ['start', 'end'].forEach((p) => {
-            const period = `${p}Period`;
-            if (dayoffData[period] && !Dayoff.periods.includes(dayoffData[period])) {
-                throw new ValidationError(`Wrong ${p} period '${dayoffData[period]}'`);
-            }
-        });
         // contrôle conflits absence
         if (!isForced) {
             await DayoffService.getConflicts({

@@ -51,6 +51,12 @@ const parseEnv = (data, schema) => {
 
 const env = parseEnv(process.env, envSchema);
 
+// forces slack and dialogflow to be disabled in test environment
+if (env.ENVIRONMENT === 'test') {
+    env.SLACK_ENABLED = false;
+    env.DIALOGFLOW_ENABLED = false;
+}
+
 module.exports = {
     env,
     parseEnv,

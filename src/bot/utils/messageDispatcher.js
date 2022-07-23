@@ -12,9 +12,10 @@ const MessageDispatcher = {
 
     // this should generally not be called with await
     // as it can take quite a bit of time to send multiple messages
-    async post(messages) {
+    // message parameter expects a Slack postMessage payload
+    async post(message) {
         if (SDK.isActive()) {
-            this.messages.push(...messages);
+            this.messages.push(message);
             if (!this.isRunning) {
                 this.isRunning = true;
                 await this.process();

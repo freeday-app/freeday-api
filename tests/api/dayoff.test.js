@@ -158,7 +158,11 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
             user: API.user.id,
             slackUser: data.slackUserId
         });
-        daysoff.push(response.body);
+        if (Array.isArray(data.slackUserId)) {
+            daysoff.push(...response.body.daysoff);
+        } else {
+            daysoff.push(response.body);
+        }
         return response.body;
     };
 
@@ -365,6 +369,32 @@ const runDayoffTests = (Data, cnf = null, deleteAllDaysoffWhenDone = false) => {
                 });
                 dayoffTypeIdx += 1;
             }
+        });
+
+        it('Should create daysoff for multiple users', async () => {
+            const dayoffType = dayoffTypes[0];
+            const body = await createDayoff({
+                ...Data.createBulk.post,
+                type: dayoffType.id
+            });
+            expect(body).to.be.an('object');
+            expect(body).to.have.property('daysoff');
+            expect(body.daysoff).to.be.an('array');
+            expect(body.daysoff).to.have.lengthOf.above(0);
+            expect(body.daysoff).to.have.lengthOf(
+                Data.createBulk.post.slackUserId.length
+            );
+            const daysoffBySlackUserId = Object.fromEntries(
+                body.daysoff.map((dayoff) => (
+                    [dayoff.slackUser.slackId, dayoff]
+                ))
+            );
+            Data.createBulk.expected.forEach((expectedDayoff) => {
+                assertDayoff(daysoffBySlackUserId[expectedDayoff.slackUser.slackId], {
+                    ...expectedDayoff,
+                    type: dayoffType
+                });
+            });
         });
 
         it('Should force create daysoff and ignore conflicts', async () => {

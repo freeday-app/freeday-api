@@ -65,22 +65,33 @@
                 "format": "mongo-id"
             },
             "slackUserId": {
-                "type": "string",
-                "format": "slack-user-id"
+                "oneOf": [{
+                    "type": "string",
+                    "format": "slack-user-id"
+                }, {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string",
+                        "format": "slack-user-id"
+                    }
+                }]
             },
             "start": {
                 "type": "string",
                 "format": "date"
             },
             "startPeriod": {
-                "type": "string"
+                "type": "string",
+                "format": "period"
             },
             "end": {
                 "type": "string",
                 "format": "date"
             },
             "endPeriod": {
-                "type": "string"
+                "type": "string",
+                "format": "period"
             },
             "comment": {
                 "type": "string"
@@ -104,14 +115,16 @@
                 "format": "date"
             },
             "startPeriod": {
-                "type": "string"
+                "type": "string",
+                "format": "period"
             },
             "end": {
                 "type": "string",
                 "format": "date"
             },
             "endPeriod": {
-                "type": "string"
+                "type": "string",
+                "format": "period"
             },
             "comment": {
                 "type": "string"

@@ -22,7 +22,6 @@ const SDK = {
     ],
 
     // initializes slack sdk
-    // async init(App, auth) {
     async init(App) {
         try {
             // initializes web clients

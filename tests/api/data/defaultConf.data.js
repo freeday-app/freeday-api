@@ -167,6 +167,35 @@ module.exports = (slackUsers) => {
         }
     }];
 
+    const activeSlackUsers = slackUsers.filter(({ deleted }) => !deleted);
+
+    const createBulk = {
+        post: {
+            slackUserId: activeSlackUsers.map(({ slackId }) => slackId),
+            start: '2022-07-18',
+            end: '2022-07-20',
+            startPeriod: 'pm',
+            endPeriod: 'am',
+            comment: 'Bulk comment'
+        },
+        expected: activeSlackUsers.map((slackUser) => ({
+            count: 2,
+            start: '2022-07-18',
+            end: '2022-07-20',
+            startPeriod: 'pm',
+            endPeriod: 'am',
+            days: [
+                '2022-07-18',
+                '2022-07-19',
+                '2022-07-20'
+            ],
+            slackUser,
+            comment: 'Bulk comment',
+            canceled: false,
+            confirmed: false
+        }))
+    };
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ conflict
 
     const conflict = [{
@@ -270,6 +299,7 @@ module.exports = (slackUsers) => {
     return {
         noWorkDay,
         create,
+        createBulk,
         conflict,
         edit,
         blank

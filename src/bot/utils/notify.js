@@ -16,10 +16,10 @@ const Notify = {
                 ...content
             };
             if (dispatch) {
+                MessageDispatcher.post(data);
+            } else {
                 const SDKWeb = await SDK.web();
                 await SDKWeb.chat.postMessage(data);
-            } else {
-                MessageDispatcher.post(data);
             }
             StatsLog.logNotifyUser(userId);
         }
@@ -57,13 +57,14 @@ const Notify = {
 
     // envoie messages notifications à référent après opération absence
     referrerCreate: async (referrerId, dayoff) => Notify.referrer('create', referrerId, dayoff),
+    referrerBulkCreate: async (referrerId, dayoff) => Notify.referrer('bulkCreate', referrerId, dayoff),
     referrerEdit: async (referrerId, dayoff) => Notify.referrer('edit', referrerId, dayoff),
     referrerCancel: async (referrerId, dayoff) => Notify.referrer('cancel', referrerId, dayoff),
     async referrer(type, referrerId, dayoff, status = true) {
         Log.info(`Sending referrer notification to channel ${referrerId} for dayoff ${dayoff.id}`);
         // récupère une fonction permettant d'obtenir le texte dans la langue du channel référent
         const getText = LanguageService.getLocaleAccessor(LanguageService.DEFAULT);
-        const title = getText(`notifications.referrer_${type}`, dayoff.slackUser.name);
+        const title = getText(`notifications.referrer_${type}`, dayoff.bulkCount);
         const dayoffAttachment = Attachments.dayoff({
             dayoff,
             withTitle: title,

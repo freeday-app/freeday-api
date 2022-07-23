@@ -83,6 +83,7 @@
 	},
 	"notifications": {
 		"referrer_create": "A dayoff was created for %s",
+		"referrer_bulkCreate": "A dayoff was created for %s users",
 		"referrer_edit": "A dayoff was edited for %s",
 		"referrer_delete": "A dayoff was deleted for %s",
 		"referrer_cancel": "A dayoff was canceled for %s",

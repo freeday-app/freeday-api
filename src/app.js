@@ -39,8 +39,8 @@ App.use('/api/*', Helmet());
         // initialise modèles et connecte mongodb
         await Models.init();
 
-        // initialize bot slack
-        // doit se trouver avant initialisation body parser
+        // initialize slack bot
+        // must be placed before Express.json and Express.urlencoded middlewares
         if (env.SLACK_ENABLED) {
             await Bot.init(App);
         }
