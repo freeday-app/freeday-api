@@ -17,6 +17,9 @@ const Log = require('./services/log.js');
 const Jobs = require('./services/jobs.js');
 const Auth = require('./api/controllers/auth.js');
 
+// set timezone
+process.env.TZ = env.TIMEZONE;
+
 // initialise dayjs plugins
 DayJS.extend(CustomParseFormat);
 DayJS.extend(IsSameOrBefore);

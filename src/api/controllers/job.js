@@ -121,9 +121,9 @@ const Job = {
     },
 
     async acquire(jobName, jobHandler) {
-        const lastJobEvent = await Models.JobEvent.findOneAndUpdate({
+        const lastJobEvent = await Models.JobEvent.findOne({
             name: jobName
-        }, {
+        }, {}, {
             sort: {
                 date: -1
             }
@@ -134,13 +134,11 @@ const Job = {
             name: jobName
         });
         const jobJson = job.toJSON();
-
         if (Tools.jobShouldRun(jobJson, lastJobEventJson.date)) {
             // runs the job
             try {
                 Log.info(`Running job '${jobName}'`);
                 await jobHandler();
-
                 // when the job has completed, we log a sucessful execution
                 await Job.createEvent({
                     name: jobName,

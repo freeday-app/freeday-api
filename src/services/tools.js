@@ -217,17 +217,10 @@ const Tools = {
             ...pattern
         };
         const cronPattern = `${p.minute} ${p.hour} ${p.dayOfMonth} ${p.month} ${p.dayOfWeek}`;
-        const options = {
+        const cronIterator = CronParser.parseExpression(cronPattern, {
             currentDate: date
-        };
-        const cronIterator = CronParser.parseExpression(cronPattern, options);
+        });
         return DayJS(cronIterator.next().toDate());
-    },
-
-    durationToNextMinute() {
-        const now = DayJS();
-        const then = DayJS().startOf('minute').add(1, 'minutes');
-        return then.diff(now);
     }
 
 };

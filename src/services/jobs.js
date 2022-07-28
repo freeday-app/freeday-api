@@ -2,7 +2,6 @@ const Log = require('./log.js');
 const Recap = require('../bot/views/recap.js');
 const Language = require('./language.js');
 const { env } = require('./env.js');
-const Tools = require('./tools.js');
 const SlackDataController = require('../api/controllers/slackData.js');
 const JobController = require('../api/controllers/job.js');
 
@@ -19,10 +18,8 @@ const Jobs = {
 
     start() {
         if (!Jobs.timeout) {
-            setTimeout(() => {
-                Jobs.timeout = setInterval(Jobs.invoke, Jobs.interval);
-                Jobs.invoke();
-            }, Tools.durationToNextMinute());
+            Jobs.timeout = setInterval(Jobs.invoke, Jobs.interval);
+            Jobs.invoke();
         }
     },
 

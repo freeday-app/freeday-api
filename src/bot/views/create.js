@@ -1,3 +1,5 @@
+const DayJS = require('dayjs');
+
 const Attachments = require('./attachments.js');
 const SDK = require('../utils/sdk.js');
 const DayoffService = require('../../services/dayoff.js');
@@ -21,8 +23,8 @@ const Create = {
         // construit le dayoff et ajoute les jours
         const { date, startDate, endDate } = payload.dialogflow;
         const data = {
-            start: date || startDate ? new Date(date || startDate) : null,
-            end: endDate ? new Date(endDate) : null,
+            start: date || startDate ? DayJS(date || startDate).toDate() : null,
+            end: endDate ? DayJS(endDate).toDate() : null,
             type,
             slackUser: await SlackDataController.getUserData(payload.user)
         };
