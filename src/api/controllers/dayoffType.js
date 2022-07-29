@@ -48,7 +48,7 @@ const DayoffType = {
                 case 'enabled':
                 case 'displayed':
                 case 'important':
-                    find[key] = val === 'true';
+                    find[key] = val === 'true' || val === true;
                     break;
                 default:
             }

@@ -16,7 +16,7 @@ const Bot = {
             // initialise sdk slack
             await SDK.init(App);
             // initialise dialogflow
-            if (env.DIALOGFLOW_ENABLED === 'true') {
+            if (env.DIALOGFLOW_ENABLED) {
                 DialogService.init();
             }
             // bind handlers
@@ -63,7 +63,7 @@ const Bot = {
             const response = await [
                 Handlers.botFilterMiddleware,
                 LanguageService.slackMiddleware,
-                env.DIALOGFLOW_ENABLED === 'true' ? DialogService.slackMiddleware : null,
+                env.DIALOGFLOW_ENABLED ? DialogService.slackMiddleware : null,
                 handler
             ].filter((m) => !!m).reduce(Bot.applyMiddleware, processedEvent);
 

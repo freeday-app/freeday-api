@@ -1,4 +1,4 @@
-const dialogflow = require('@google-cloud/dialogflow');
+const Dialogflow = require('@google-cloud/dialogflow');
 const DayJS = require('dayjs');
 
 const { env } = require('./env.js');
@@ -30,7 +30,7 @@ const Dialog = {
         }/users/${
             env.DIALOGFLOW_USER
         }/sessions/freeday`;
-        Dialog.client = new dialogflow.SessionsClient({
+        Dialog.client = new Dialogflow.SessionsClient({
             apiEndpoint: env.DIALOGFLOW_ENDPOINT,
             keyFilename: env.DIALOGFLOW_KEYFILE
         });
