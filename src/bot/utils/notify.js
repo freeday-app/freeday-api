@@ -64,7 +64,10 @@ const Notify = {
         Log.info(`Sending referrer notification to channel ${referrerId} for dayoff ${dayoff.id}`);
         // récupère une fonction permettant d'obtenir le texte dans la langue du channel référent
         const getText = LanguageService.getLocaleAccessor(LanguageService.DEFAULT);
-        const title = getText(`notifications.referrer_${type}`, dayoff.bulkCount);
+        const title = getText(
+            `notifications.referrer_${type}`,
+            type === 'bulkCreate' ? dayoff.bulkCount : dayoff.slackUser.name
+        );
         const dayoffAttachment = Attachments.dayoff({
             dayoff,
             withTitle: title,
