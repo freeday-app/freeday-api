@@ -90,7 +90,7 @@
 		"user_create": "Votre absence a été ajoutée",
 		"user_edit": "Votre absence a été modifiée",
 		"user_delete": "Votre absence a été supprimée",
-		"action": "Le statut de votre absence a changé"
+		"action": "Le statut de votre absence a été changée par %s"
 	},
 	"errors": {
 		"no_work_days": "Aucun jour ouvré dans cette absence",

@@ -90,7 +90,7 @@
 		"user_create": "Your dayoff has been created",
 		"user_edit": "Your dayoff has been edited",
 		"user_delete": "Your dayoff has been deleted",
-		"action": "Your dayoff status has changed"
+		"action": "Your dayoff status has been changed by"
 	},
 	"errors": {
 		"no_work_days": "No work days in dayoff",

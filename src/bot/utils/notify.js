@@ -86,14 +86,14 @@ const Notify = {
     },
 
     // envoie notification à utilisateur après action sur absence
-    async statusChange(userId, dayoff) {
+    async statusChange(userId, dayoff, userAdmin) {
         Log.info(`Sending status change to channel ${userId} for dayoff ${dayoff.id}`);
         // récupère une fonction permettant d'obtenir le texte dans la langue de l'utilisateur
         const getText = await LanguageService.getUserLocaleAccessor(userId);
         let color = 'warning';
         if (dayoff.confirmed) { color = 'good'; }
         if (dayoff.canceled) { color = 'danger'; }
-        const title = getText('notifications.action');
+        const title = getText('notifications.action', userAdmin.username);
         const dayoffAttachment = Attachments.dayoff({
             dayoff,
             withTitle: title,

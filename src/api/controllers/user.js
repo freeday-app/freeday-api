@@ -156,6 +156,14 @@ const User = {
         if (controlUser) {
             throw new ConflictError(`Username ${username} already exists`);
         }
+    },
+
+    async findUserById(id) {
+        validateParamUuid(id);
+        const user = await Models.User.findOne({
+            _id: id
+        }).exec();
+        return user.toJSON();
     }
 
 };

@@ -1,5 +1,7 @@
 const DayJS = require('dayjs');
 
+const UserController = require('./user.js');
+
 const { validator, validateParamUuid } = require('../../services/validator.js');
 const Models = require('../models/index.js');
 const Notify = require('../../bot/utils/notify.js');
@@ -440,7 +442,8 @@ const Dayoff = {
                 action,
                 id: req.params.id,
                 cancelReason: req.body.cancelReason,
-                force: req.body.force
+                force: req.body.force,
+                adminId: req.auth.userId
             });
             StatsLog.logClientActionDayOff(
                 action,
@@ -473,6 +476,7 @@ const Dayoff = {
             cancelReason: null,
             cancelNotifyReferrer: false,
             force: false,
+            adminId: null,
             ...opts
         };
         const {
@@ -480,8 +484,10 @@ const Dayoff = {
             action,
             cancelReason,
             cancelNotifyReferrer,
-            force
+            force,
+            adminId
         } = options;
+
         // gère conflits si besoin
         if (action === 'confirm') {
             const dayoffData = await Dayoff.getProxy(id);
@@ -496,13 +502,17 @@ const Dayoff = {
             new: true,
             runValidators: true
         }).exec();
+
+        // trouve l'admin depuis l'id
+        const userAdmin = await UserController.findUserById(adminId);
+
         if (dayoff) {
             // si bot slack actif
             if (env.SLACK_ENABLED) {
                 const errorQueue = [];
                 try {
                     // notifie utilisateur de l'action sur son absence
-                    await Notify.statusChange(dayoff.slackUser.slackId, dayoff);
+                    await Notify.statusChange(dayoff.slackUser.slackId, dayoff, userAdmin);
                 } catch (err) {
                     errorQueue.push(new NotifyUserError());
                 }
