@@ -546,6 +546,16 @@ const Dayoff = {
             }
             await Promise.all(tasks);
         }
+    },
+
+    // gère apppel des jours feriés
+    async getHolidays(req, res) {
+        try {
+            const holidays = await DayoffService.getHolidays(req.params.year);
+            res.status(200).json(holidays);
+        } catch (err) {
+            res.error(err);
+        }
     }
 
 };

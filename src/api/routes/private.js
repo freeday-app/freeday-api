@@ -41,6 +41,7 @@ module.exports = (App, authMid) => {
     App.put('/api/daysoff/:id/confirm', authMid, Controllers.dayoff.confirm);
     App.put('/api/daysoff/:id/cancel', authMid, Controllers.dayoff.cancel);
     App.put('/api/daysoff/:id/reset', authMid, Controllers.dayoff.reset);
+    App.get('/api/daysoff/holidays/:year', authMid, Controllers.dayoff.getHolidays);
 
     // Configuration
     App.get('/api/configuration', authMid, Controllers.configuration.get);
