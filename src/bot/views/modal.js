@@ -44,6 +44,8 @@ const Modal = {
         const endPeriod = dayoff ? dayoff.endPeriod || null : null;
         const dayoffType = dayoff ? dayoff.type || null : null;
         const comment = dayoff ? dayoff.comment || null : null;
+        const statusType = dayoff ? dayoff.status || null : null;
+
         return {
             view: {
                 private_metadata: JSON.stringify({
@@ -64,7 +66,8 @@ const Modal = {
                     Modal.inputs.datePicker(payload, 'end', endDate, true),
                     Modal.inputs.periodSelect(payload, 'end', endPeriod),
                     Modal.inputs.dayoffTypeSelect(payload, dayoffTypes, dayoffType, true),
-                    Modal.inputs.textInput(payload, 'comment', comment)
+                    Modal.inputs.textInput(payload, 'comment', comment),
+                    Modal.inputs.dayoffStatusSelect(payload, statusType)
                 ],
                 submit: {
                     type: 'plain_text',
@@ -192,8 +195,50 @@ const Modal = {
                 },
                 optional: !required
             };
-        }
+        },
 
+        dayoffStatusSelect: (payload, selectedType = null) => {
+            const required = false;
+            const options = [
+                { text: {
+                    type: 'plain_text',
+                    text: payload.getText('dayoff.status.confirmed')
+                },
+                value: text('dayoff.status.confirmed') },
+                { text: {
+                    type: 'plain_text',
+                    text: payload.getText('dayoff.status.canceled')
+                },
+                value: payload.getText('dayoff.status.canceled') },
+                { text: {
+                    type: 'plain_text',
+                    text: payload.getText('dayoff.status.pending')
+                },
+                value: payload.getText('dayoff.status.pending') 
+            }]
+            const initialOption = selectedType ? options.filter((opt) => (
+                opt.value.toString() === selectedType.id.toString()
+            ))[0] : options[0];
+            return {
+                block_id: 'dayoff_status',
+                type: 'input',
+                label: {
+                    type: 'plain_text',
+                    text: payload.getText('dayoff.status')
+                },
+                element: {
+                    action_id: 'dayoff_status',
+                    type: 'static_select',
+                    placeholder: {
+                        type: 'plain_text',
+                        text: payload.getText('form.select_status')
+                    },
+                    options,
+                    initial_option: initialOption
+                },
+                optional: !required
+            };
+        },
     },
 
     // returns response error object for slack view submission when validation error

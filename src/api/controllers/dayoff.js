@@ -182,6 +182,11 @@ const Dayoff = {
             type: dayoffType,
             slackUser
         }, workDays);
+        // ajout statut
+        if (typeof(data.confirmed) !== undefined || typeof(data.canceled) !== undefined) {
+            dayoffData.confirmed = data.confirmed;
+            dayoffData.canceled = data.canceled;
+        }
         // contrôle conflits absence
         if (!isForced) {
             await DayoffService.getConflicts(dayoffData, true);
@@ -244,6 +249,11 @@ const Dayoff = {
             type: dayoffType,
             slackUser: {}
         }, workDays);
+        // ajout statut
+        if (typeof(data.confirmed) !== undefined || typeof(data.canceled) !== undefined) {
+            dayoffData.confirmed = data.confirmed;
+            dayoffData.canceled = data.canceled;
+        }
         // insert multiple daysoff
         const { insertedIds } = await Models.Dayoff.insertMany(
             slackUsers.map((user) => {
@@ -350,8 +360,11 @@ const Dayoff = {
             ...data
         }, workDays, false);
         // réinitialise statut absence après modification
-        dayoffData.canceled = false;
-        dayoffData.confirmed = false;
+        // ajout statut
+        if (typeof(data.confirmed) !== undefined || typeof(data.canceled) !== undefined){
+            dayoffData.confirmed = data.confirmed;
+            dayoffData.canceled = data.canceled;
+        }
         // contrôle conflits absence
         if (!isForced) {
             await DayoffService.getConflicts({
