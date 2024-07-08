@@ -48,6 +48,12 @@
             "limit": {
                 "type": "string",
                 "format": "number"
+            },
+            "confirmed": {
+                "type": "boolean"
+            },
+            "canceled": {
+                "type": "boolean"
             }
         }
     },
@@ -133,6 +139,12 @@
                 "type": "string"
             },
             "force": {
+                "type": "boolean"
+            },
+            "confirmed": {
+                "type": "boolean"
+            },
+            "canceled": {
                 "type": "boolean"
             }
         }

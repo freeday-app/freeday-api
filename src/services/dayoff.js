@@ -319,8 +319,27 @@ const DayoffService = {
             throw new DisabledDayoffTypeError(`Dayoff type ${typeId} is disabled`);
         }
         throw new ValidationError(`Wrong dayoff type '${typeId}'`);
-    }
+    },
 
+    // vérifie les modifications faites à une absence éditée
+    async isDifferent(previousDayoff, editedDayoff) {
+        const {
+            end, endPeriod, start, startPeriod, comment
+        } = editedDayoff;
+        const endP = previousDayoff.end;
+        const endPeriodP = previousDayoff.endPeriod;
+        const startP = previousDayoff.start;
+        const startPeriodP = previousDayoff.startPeriod;
+        const commentP = previousDayoff.comment;
+        const validStart = DayJS(start).isSame(DayJS(startP));
+        const validEnd = DayJS(end).isSame(DayJS(endP));
+        if (validStart && endPeriod === endPeriodP && validEnd && startPeriod === startPeriodP) {
+            if (comment !== commentP) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 module.exports = DayoffService;

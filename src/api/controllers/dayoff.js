@@ -349,9 +349,6 @@ const Dayoff = {
             ...resultGet._doc, // eslint-disable-line no-underscore-dangle
             ...data
         }, workDays, false);
-        // réinitialise statut absence après modification
-        dayoffData.canceled = false;
-        dayoffData.confirmed = false;
         // contrôle conflits absence
         if (!isForced) {
             await DayoffService.getConflicts({
@@ -359,6 +356,16 @@ const Dayoff = {
                 ...dayoffData
             }, true);
         }
+        // change ou non le statut absence selon modifications
+        const edit = await DayoffService.isDifferent(resultGet, dayoffData);
+        if (!edit) {
+            dayoffData.canceled = data.canceled;
+            dayoffData.confirm = data.confirmed;
+        } else {
+            dayoffData.canceled = false;
+            dayoffData.confirmed = false;
+        }
+
         // update données absence en base de données
         const resultSet = await Models.Dayoff.findOneAndUpdate({
             _id: id
