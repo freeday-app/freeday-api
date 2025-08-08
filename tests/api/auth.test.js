@@ -24,6 +24,7 @@ describe('[API] Authentication', () => {
         });
 
         it('Should throw authentication error', async () => {
+            API.resetAgent();
             const response = await API.request(false)
                 .post('/api/auth')
                 .send({
@@ -40,7 +41,7 @@ describe('[API] Authentication', () => {
         });
 
         it('Should authenticate successfully', async () => {
-            const response = await API.request(false)
+            const response = await API.request()
                 .post('/api/auth')
                 .send({
                     username: API.user.username,
@@ -52,7 +53,6 @@ describe('[API] Authentication', () => {
             expect(body).to.be.an('object');
             expect(body).to.have.property('userId');
             expect(body).to.have.property('limit');
-            expect(body).to.have.property('token');
             expect(body.userId).to.equal(API.user.id);
             assertLastLogEntryValues({
                 interface: 'client',
@@ -68,8 +68,7 @@ describe('[API] Authentication', () => {
         it('Should throw authentication error', async () => {
             const authenticationError = async (url) => {
                 const response = await API.request(false)
-                    .get(url)
-                    .set('Authorization', 'abc123');
+                    .get(url);
                 expect(response).to.have.status(401);
                 expect(response).to.be.json;
                 const { body } = response;
@@ -78,6 +77,7 @@ describe('[API] Authentication', () => {
                 expect(body).to.have.property('code');
                 expect(body.code).to.equal(4010);
             };
+            API.resetAgent();
             await authenticationError('/api/auth');
             await authenticationError('/api/users');
             await authenticationError('/api/daysoff');
@@ -86,15 +86,13 @@ describe('[API] Authentication', () => {
 
         it('Should authenticate successfully', async () => {
             const response = await API.request(false)
-                .get('/api/auth')
-                .set('Authorization', API.token);
+                .get('/api/auth');
             expect(response).to.have.status(200);
             expect(response).to.be.json;
             const { body } = response;
             expect(body).to.be.an('object');
             expect(body).to.have.property('userId');
             expect(body).to.have.property('limit');
-            expect(body).to.have.property('token');
             expect(body.userId).to.equal(API.user.id);
         });
     });
