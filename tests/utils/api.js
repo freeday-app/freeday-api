@@ -26,6 +26,7 @@ const API = {
     password: null,
     token: null,
     initDone: false,
+    agent: null,
 
     // initializes api for tests
     async init() {
@@ -36,6 +37,8 @@ const API = {
         Log.info('Switching console level to error');
         Log.toggleTransport('file', true, 'error');
         Log.toggleTransport('console', true, 'error');
+        //
+        API.agent = Chai.request.agent(App);
         // creates test user
         const { username, password } = await API.createUser();
         // set user data locally
@@ -46,26 +49,13 @@ const API = {
         //
         API.initDone = true;
     },
+    async resetAgent() {
+        API.agent = Chai.request.agent(App);
+        API.initDone = false;
+    },
 
     // renvoie object chai http pour requête sur api
-    request: (auth = true) => {
-        const getReq = (method, ...args) => {
-            let chaiReq = Chai.request(App)[method](...args);
-            if (auth === true) {
-                chaiReq = chaiReq.set('Authorization', API.token);
-            } else if (auth) {
-                chaiReq = chaiReq.set('Authorization', auth);
-            }
-            return chaiReq;
-        };
-        return {
-            get: (...args) => getReq('get', ...args),
-            post: (...args) => getReq('post', ...args),
-            put: (...args) => getReq('put', ...args),
-            delete: (...args) => getReq('delete', ...args),
-            patch: (...args) => getReq('patch', ...args)
-        };
-    },
+    request: () => API.agent,
 
     // creates test user
     async createUser() {
@@ -89,16 +79,11 @@ const API = {
         const username = usrnm || API.user.username;
         const password = psswd || API.password;
         API.password = password;
-        const tokenResponse = await API.request(false)
+        await API.request()
             .post('/api/auth')
             .send({ username, password });
-        API.token = tokenResponse.body.token;
-        if (!API.token) {
-            throw new Error('Invalid token received during API initialization');
-        }
         const userResponse = await API.request()
-            .get('/api/users/me')
-            .set('Authorization', API.token);
+            .get('/api/users/me');
         API.user = userResponse.body;
     },
 

@@ -51,13 +51,18 @@ const Auth = {
                     upsert: true
                 }).exec();
                 // données token
-                const token = await result.toJSON();
+                const { token, ...userData } = await result.toJSON();
                 // cleans initialization token
                 await Auth.deleteInitialization();
-                //
                 Log.info(`User ${user.id} logged in`);
                 StatsLog.logLogin(user.id, req.ip);
-                res.status(200).json(token);
+                res.cookie('auth_cookie', JSON.stringify({ token: uid }), {
+                    httpOnly: true,
+                    secure: env.COOKIE_SECURE,
+                    sameSite: env.COOKIE_SAME_SITE,
+                    expires: DayJS().add(3, 'hours').toDate()
+                });
+                res.status(200).json(userData);
             } else {
                 throw new AuthenticationError();
             }
@@ -87,12 +92,23 @@ const Auth = {
         throw new AuthenticationError();
     },
 
+    // check authorization token from cookies
+    checkAuthCookie(req) {
+        if (!req.cookies?.auth_cookie) throw new AuthenticationError();
+        let authCookie = null;
+        try {
+            authCookie = JSON.parse(req.cookies.auth_cookie);
+        } catch (err) {
+            throw new AuthenticationError();
+        }
+        if (!authCookie?.token) throw new AuthenticationError();
+        return authCookie.token;
+    },
+
     // middleware contrôle token authentification
     async middleware(req, res, next) {
         try {
-            // contrôle token
-            const token = Auth.checkAuthHeader(req);
-            // cherche token valide correspondant en base
+            const token = Auth.checkAuthCookie(req);
             const result = await Models.Token.findOneAndUpdate({
                 $and: [{
                     token
@@ -218,7 +234,6 @@ const Auth = {
             await Auth.isEmpty(true);
             // checks secret validity
             await Auth.checkWelcomeSecret(base64Secret);
-            //
             res.status(200).json({});
         } catch (err) {
             res.error(err);

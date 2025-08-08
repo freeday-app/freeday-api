@@ -7,6 +7,7 @@ const IsoWeek = require('dayjs/plugin/isoWeek.js');
 
 const Express = require('express');
 const Helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 
 const Bot = require('./bot/index.js');
 const Models = require('./api/models/index.js');
@@ -16,7 +17,6 @@ const { env } = require('./services/env.js');
 const Log = require('./services/log.js');
 const Jobs = require('./services/jobs.js');
 const Auth = require('./api/controllers/auth.js');
-
 // set timezone
 process.env.TZ = env.TIMEZONE;
 
@@ -47,6 +47,9 @@ App.use('/api/*', Helmet());
         if (env.SLACK_ENABLED) {
             await Bot.init(App);
         }
+
+        // initialise cookie parser
+        App.use(cookieParser());
 
         // initialise body parser
         App.use(Express.json());
